@@ -1,0 +1,353 @@
+@media only screen and (min-width: 0px) {
+}
+@media only screen and (min-width: 480px) {
+}
+@media only screen and (min-width: 768px) {
+}
+@media only screen and (min-width: 1024px) {
+}
+
+/* XS */
+@media (min-width: 0px) and (max-width: 768px) {
+
+#navigation{
+    position: relative;
+    z-index: 999;
+    width: 100%;
+}
+.nav_sel{
+    border: none;
+}
+div#logo{
+    margin: 0 auto;
+    width: 200px;
+    float: none;
+}
+div#logo img{
+    width: 100%;
+}
+div#mensaje{
+    text-align: center;
+    float: none;
+    margin: 0px;        
+}
+.navbar-collapse{
+    overflow: hidden;
+}
+.pagination{
+	margin-left: 20px;	
+}
+.cont_left{
+	margin-bottom: 0px;
+	height: auto;
+    padding-bottom: 20px;
+}
+.cont_right {
+    border-left: 1px solid #e2e2e2;
+    height: auto;
+    margin-bottom: 30px;
+}
+.cont_in_r{
+    margin-left: 0px;
+}
+.noticia {
+    height: auto;
+    margin-bottom: 20px;
+}
+.noticia h1 {
+    font-size: 16px;
+}
+.noticia p {
+    font-size: 16px;
+}
+.noticia a {
+    font-size: 16px;
+    float: right;
+}
+.noticia img {
+    margin-bottom: 20px; 
+    height: 100px;
+}
+.noticia_show {
+    margin: 0px 10px 10px 15px;
+}
+.noticia_show img{
+    margin: 0px 0px 20px 0px;
+    background-color: #000;
+    width: 100%;
+    height: 240px;
+    float: right;
+}
+
+div#slider {
+    height: 180px;
+    padding: 0px 0px 20px 0px;
+    margin-top: 20px;
+}
+div#slider img{
+    width: 100%;
+    height: 180px;
+    margin: 0px;
+    padding: 0px;
+}
+div#slider_box {
+
+}
+div#slider_name {
+}
+.publicidad {
+    text-align: center;
+    background: #999;
+    height: 100px;
+    margin: 0px 0px 20px 0px;
+    display: inline-block;
+}
+.box_header{
+    margin-bottom: 30px;
+    height: 60px;
+}
+.bh_left{
+    margin-bottom: 0px;
+    height: 40px;
+}
+.box_header img{
+    margin: 30px 15px 0px 10px;
+}
+.box_header p {
+    margin: 30px 10px 0px 0px;
+}
+.bx_title{
+    float: left;
+}
+.burger{
+    display: inline;
+}
+
+/** calendario **/
+div#btns_cal{
+    display: block; 
+}
+
+
+/*  login  */
+div#login_box {
+    width: auto;
+    height: 500px;
+    margin-top: 100px;
+}
+
+/* mi_fraccionamiento*/
+.box_header h1 {
+    font-size: 16px;
+    margin: 35px 10px 0px 65px;
+}
+#ul_interna{
+    padding: 0px;
+}
+#ul_interna li {
+    padding: 8px 0px 1px 20px;
+    margin: 0px 0px 10px 0px;
+    width: auto;
+    list-style: none;
+    height: auto;
+    cursor: pointer;
+}
+
+
+.typeahead, .tt-query, .tt-hint {
+    width: 100%;
+}
+.tt-menu {
+    width: 100%;
+}
+
+div#the-basics{
+    float: left;
+    margin-top: 20px;
+}
+
+#divSitio img{
+    width: 100%;
+}
+
+/** contenidos **/
+#tablaUsuarios thead th:nth-child(2){
+	display: none;
+}
+#tablaUsuarios tbody td:nth-child(2){
+	display: none;
+}
+#tablaUsuarios thead th:nth-child(3){
+	display: none;
+}
+#tablaUsuarios tbody td:nth-child(3){
+	display: none;
+}
+
+/** CONTACTO **/
+.contact-form {
+    width: 100%;
+    margin-left: 0px;
+}
+.bx_80{
+    width:80%;
+}
+
+/** FINANZAS **/
+.cifras {
+    width: 100% !important;
+    text-align: center;
+    float: left;
+}
+.chart {
+    width: 100%;
+    height: 400px;
+    float: right;
+    margin: 0px 0px 0px 0px;
+}
+.cifras tbody tr {
+    width: 100%;
+    float: left;
+}
+.saldos tbody tr {
+    width: 100%;
+    float: left;
+}
+
+
+}/**END XS*/
+
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 992px){
+
+#navigation div p {font-size: 12px;}
+.container {width: inherit !important;}
+.noticia {
+    height: 125px;
+}
+.noticia h1 {
+    font-size: 16px;
+}
+.noticia p {
+    font-size: 16px;
+}
+.noticia a {
+    font-size: 16px;
+    float: right;
+}
+.noticia_show img{
+    margin: 0px 0px 20px 0px;
+    background-color: #000;
+    width: 100%;
+    height: 330px;
+    float: right;
+}
+.vmas{
+    margin-top: 0px;
+}
+
+.cont_left{
+	margin-bottom: 0px;
+	height: auto;
+    padding-bottom: 20px;
+}
+.cont_right {
+    border-left: 1px solid #e2e2e2;
+    height: auto;
+    margin-bottom: 30px;
+}
+.cont_in_r{
+    margin-left: 0px;
+}
+
+.box_header{
+    margin-bottom: 30px;
+    height: 60px;
+}
+.bh_left{
+    margin-bottom: 0px;
+    height: 40px;
+}
+.box_header img{
+    margin: 30px 15px 0px 10px;
+}
+.box_header p {
+    margin: 30px 10px 0px 0px;
+}
+.bx_title{
+    float: left;
+}
+.burger{
+    display: inline;
+}
+
+.typeahead, .tt-query, .tt-hint {
+    width: 100%;
+}
+.tt-menu {
+    width: 100%;
+}
+div#the-basics{
+    float: left;
+    margin-top: 20px;
+}
+
+#divSitio img{
+    width: 100%;
+}
+
+.bx_80{
+    width:80%;
+}
+
+/** FINANZAS **/
+.cifras {
+    width: 100% !important;
+    text-align: center;
+    float: left;
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    float: right;
+    margin: 0px 0px 0px 0px;
+}
+
+
+
+}   /*end sm*/
+
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1200px){ 
+#navigation div p {font-size: 14px;}
+
+.cont_left {
+    height: auto;
+}
+
+/*mi fraccionamiento*/
+.cont_left ul {
+    margin-left: 50px;
+}
+
+.bx_80{
+    width:100%;
+}
+
+/** FINANZAS **/
+.cifras {
+    width: 100% !important;
+    text-align: center;
+    float: left;
+}
+.chart {
+    width: 400px;
+    height: 400px;
+    float: right;
+    margin: 0px 0px 0px 0px;
+}
+
+}/* end md*/
+

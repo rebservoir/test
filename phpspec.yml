@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: TuFracc
+        psr4_prefix: TuFracc
+        src_path: app
