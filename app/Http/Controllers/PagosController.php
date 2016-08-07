@@ -92,7 +92,7 @@ class PagosController extends Controller
 
                             $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail' => $user->email];
 
-                            Mail::send('emails.msg',$data, function ($msj) use ($data) {
+                            Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
                                 $msj->subject($data['subj']);
                                 $msj->to($data['user_mail']);
                             });
