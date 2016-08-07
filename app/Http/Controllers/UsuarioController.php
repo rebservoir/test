@@ -74,7 +74,7 @@ class UsuarioController extends Controller
             $sitio = Sites::where('id', $id_site)->get();
             $sitio_plan = DB::table('sites')->where('id', $id_site )->value('plan');
             $plan = DB::table('sites')->where('id', $id_site )->value('plan');
-            $user_limit = DB::table('plans')->where('plan',$plan)->value('user_limit');
+            $user_limit = DB::table('plans')->where('id',$plan)->value('user_limit');
             $user_count = DB::table('sites_users')->where('id_site', $id_site)->count();
             $password = substr( md5(microtime()), 1, 6);
             $sitio_this = Sites::findOrFail($id_site);
