@@ -119,7 +119,7 @@ class UsuarioController extends Controller
             }else{
                 return response()->json([
                     "tipo" => 'limite',
-                    "message"=>'Limite alcanzado. No se pueden crear más usuarios.'.$user_limit
+                    "message"=>'Limite alcanzado. No se pueden crear más usuarios :('
                 ]);
 
             }     
