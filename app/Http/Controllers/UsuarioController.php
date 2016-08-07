@@ -73,13 +73,12 @@ class UsuarioController extends Controller
             $admin_email = $this->auth->user()->email;
             $sitio = Sites::where('id', $id_site)->get();
             $sitio_plan = DB::table('sites')->where('id', $id_site )->value('plan');
-            $plan = DB::table('sites')->where('id', $id_site )->value('plan');
-            $user_limit = DB::table('plans')->where('id',$plan)->value('user_limit');
+            $user_limit = DB::table('plans')->where('id',$sitio_plan)->value('user_limit');
             $user_count = DB::table('sites_users')->where('id_site', $id_site)->count();
             $password = substr( md5(microtime()), 1, 6);
             $sitio_this = Sites::findOrFail($id_site);
 
-            if( $user_count<$user_limit){
+            if($user_count<$user_limit){
 
                 $new_user = DB::table('users')->insertGetId(
                     ['name' => $request->name,
@@ -120,7 +119,7 @@ class UsuarioController extends Controller
             }else{
                 return response()->json([
                     "tipo" => 'limite',
-                    "message"=>'Limite alcanzado. No se pueden crear más usuarios.'
+                    "message"=>'Limite alcanzado. No se pueden crear más usuarios.'.$user_limit
                 ]);
 
             }     
