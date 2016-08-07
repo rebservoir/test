@@ -79,7 +79,7 @@ class UsuarioController extends Controller
             $password = substr( md5(microtime()), 1, 6);
             $sitio_this = Sites::findOrFail($id_site);
 
-            if( $user_count>=$user_limit){
+            if( $user_count<$user_limit){
 
                 $new_user = DB::table('users')->insertGetId(
                     ['name' => $request->name,
