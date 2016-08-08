@@ -136,7 +136,7 @@ class FrontController extends Controller
         $id_user = $this->auth->user()->id;
 
         $ultimo_p = DB::table('pagos')->where('id_user', $id_user)->where('status', 1)->where('id_site', $id_site)->orderBy('date', 'dsc')->get();
-        $vencidos = DB::table('pagos')->where('id_user', $id_user)->where('status', 0)->where('id_site', $id_site)->orderBy('date', 'asc')->get();
+        $vencidos = DB::table('pagos')->where('id_user', $id_user)->where('status', 0)->orWhere('status', 2)->where('id_site', $id_site)->orderBy('date', 'asc')->get();
         
         $user_type = Sites_users::where('id_site',$id_site)->where('id_user',$id_user)->value('type');
         $cuota = Cuotas::find($user_type);
@@ -379,6 +379,22 @@ class FrontController extends Controller
         }
 
         
+    }
+
+    public function corte_finanzas(){
+
+      $d=;
+      $m=;
+      $y=;
+
+      $msg = "";
+
+      $data = [ 'msg'=> $msg, 'subj'=> 'Corte finanzas', 'user_mail' => 'reb_189@hotmail.com'];
+
+        Mail::send('emails.msg',$data, function ($msj) use ($data) {
+            $msj->subject($data['subj']);
+            $msj->to($data['user_mail']);
+        });
     }
 
 
