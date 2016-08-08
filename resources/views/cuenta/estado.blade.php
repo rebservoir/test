@@ -161,6 +161,13 @@ $status = 1;
                     else
                       echo "<li><a class='saldado' href='#" .$month[$k] . $j ."'>".$month[$k]."</a></li>";         
                 /*--}}
+            @else
+               {{--*/ 
+                    if(($k+1)==$mes)
+                      echo "<li class='active'><a class='pendiente' href='#" .$month[$k] . $j . "'>".$month[$k]."</a></li>";
+                    else
+                      echo "<li><a class='pendiente' href='#" .$month[$k] . $j ."'>".$month[$k]."</a></li>";         
+                /*--}}
             @endif
           @endif
       @endforeach
@@ -260,6 +267,10 @@ $status = 1;
 }
 .adeudo{
   background-color: #d9534f;
+  color: #fff; 
+}
+.pendiente{
+  background-color: #00bcd4;
   color: #fff; 
 }
 </style>
