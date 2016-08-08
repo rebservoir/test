@@ -36,7 +36,7 @@
 							<td>{{$user->name}}</td>
 							<td>{{$user->email}}</td>
 							<td>{{$user->address}}</td>
-							<td style="padding-top:18px;">
+							<td>
 								@if($user->role == 0)
 									@if($user->status==1)
 										<span class="label label-success">Ok</span>
@@ -99,6 +99,7 @@ thead th:nth-child(4){
 tbody td:nth-child(4){
 	width: 120px;
 	text-align: center;
+    padding-top: 18px !important;
 }
 thead th:nth-child(5){
 	width: 80px;
