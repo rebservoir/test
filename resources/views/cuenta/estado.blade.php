@@ -194,10 +194,12 @@ $status = 1;
             <tr>
               <td><strong>Status:</strong></td>
                 <td><h3 style="margin-top:10px;">
-                  @if($pago->status == 1)
+                  @if($pago->status == 0)
+                    <span class="label label-danger">Adeudo</span>
+                  @elseif($pago->status == 0)
                     <span class="label label-success">Saldado</span>
                   @else
-                    <span class="label label-danger">Adeudo</span>
+                    <span class="label label-pendiente">Pendiente</span>
                   @endif
                 </h3></td>
             </tr>
@@ -272,6 +274,9 @@ $status = 1;
 .pendiente{
   background-color: #00bcd4;
   color: #fff; 
+}
+.label-pendiente{
+    background-color: #00bcd4;
 }
 </style>
 
