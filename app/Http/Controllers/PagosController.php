@@ -69,6 +69,13 @@ class PagosController extends Controller
             $pagos = DB::table('pagos')->where('id_user', $id_user)->where('id_site', $id_site)->get();
             $newDate = explode("-", $request->date);
             $flag=true;
+            $meses = array("x","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+            $site = DB::table('sites')->where('id', $id_site)->value('name');
+            $y = $newDate[0];
+            $m = intval($newDate[1]);
+            $d = $newDate[2];
+            $concepto = $meses[$m].' '.$y;
 
             if(empty($user)){
 
@@ -90,7 +97,21 @@ class PagosController extends Controller
                                 'id_site' => $id_site
                             ]);
 
-                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail' => $user->email];
+                            if($request->status == 0){
+                              $status = 'Adeudo';
+                            }elseif($request->statu == 1){
+                              $status = 'Pagado';
+                            }else{
+                             $status = 'Pendiente';
+                            }
+
+                            $importe = '$'.number_format($cuota->amount, 2, '.', '');
+
+                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail'=> $user->email,
+                            'usuario'=> $user->name,'site' => $site,'status' => $status,'fecha' => $request->date,
+                            'name'=> $user->name,'address'=> $user->address,
+                            'concepto'=> $concepto,'cuota' => $importe,'descuento' =>'0', 'importe' => $importe
+                             ];
 
                             Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
                                 $msj->subject($data['subj']);
@@ -134,9 +155,23 @@ class PagosController extends Controller
                                 'id_site' => $id_site
                             ]);
 
-                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail' => $user->email];
+                            if($request->status == 0){
+                              $status = 'Adeudo';
+                            }elseif($request->statu == 1){
+                              $status = 'Pagado';
+                            }else{
+                             $status = 'Pendiente';
+                            }
 
-                            Mail::send('emails.msg',$data, function ($msj) use ($data) {
+                            $importe = '$'.number_format($cuota->amount, 2, '.', '');
+
+                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail'=> $user->email,
+                            'usuario'=> $user->name,'site' => $site,'status' => $status,'fecha' => $request->date,
+                            'name'=> $user->name,'address'=> $user->address,
+                            'concepto'=> $concepto,'cuota' => $importe,'descuento' =>'0', 'importe' => $importe
+                             ];
+
+                            Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
                                 $msj->subject($data['subj']);
                                 $msj->to($data['user_mail']);
                             });
