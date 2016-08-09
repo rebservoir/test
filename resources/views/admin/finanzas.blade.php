@@ -77,9 +77,8 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 	{{--*/ 
 		$mes_ant=$mes_sel - 1;
 		$year_ant=0;
-		$ing=0;
 		$egr=0;
-		$amount_ant=0;
+
 		if($mes_ant==0){
 			$mes_ant=12;
 			$year_ant=$year_sel-1;
@@ -90,14 +89,6 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 		$saldo_anterior=0;
 	/*--}}
 
-		@foreach($pagos as $pago)
-			{{--*/ 	$date_pago = explode("-", $pago->fecha_pago);/*--}}
-			@if(($date_pago[1] == $mes_ant) && ($date_pago[0] == $year_ant))	
-				@if($pago->status == 1)
-					{{--*/ $ing = $ing + $pago->amount; /*--}}
-				@endif
-			@endif
-		@endforeach
 
 		@foreach($egresos as $egreso)
 			{{--*/ $date = explode("-", $egreso->date) /*--}}
@@ -106,7 +97,6 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				@endif
 		@endforeach
 
-		{{--*/ $amount_ant = $ing - $egr; /*--}}
 
 		@foreach($egresos as $egreso)
 			{{--*/ $date = explode("-", $egreso->date) /*--}}
@@ -115,7 +105,7 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				@endif
 		@endforeach
 
-		{{--*/ $amount_ant = $ing - $egr; /*--}}
+
 
 
 		
@@ -135,14 +125,7 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				</th>
 			</thead>
 
-		@foreach($pagos as $pago)
-			{{--*/ 	$date_pago = explode("-", $pago->date);/*--}}
-			@if(($date_pago[1] == $mes_ant) && ($date_pago[0] == $year_ant))	
-				@if($pago->status == 1)
-					{{--*/ $ing = $ing + $pago->amount; /*--}}
-				@endif
-			@endif
-		@endforeach
+
 
 		@foreach($pagos as $pago)
 			{{--*/ $date = explode("-", $pago->fecha_pago) /*--}}
