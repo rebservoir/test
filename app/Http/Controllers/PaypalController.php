@@ -167,11 +167,11 @@ public function postPayment($type){
 			$lmt=12;
 			$descuento=true;		
 		}else if ($type==4){
-			$vencidos = DB::table('pagos')->where('id_user', $user_id)->where('id_site', $id_site)->where('status', 0)->orderBy('date', 'asc')->get();
+			$vencidos = DB::table('pagos')->where('id_user', $user_id)->where('id_site', $id_site)->where('status', 0)->orWhere('status', 2)->orderBy('date', 'asc')->get();
 			$vence_date = explode("-", $vencidos[0]->date);
 			$m=intval($vence_date[1]);
 			$y=intval($vence_date[0]);
-			//[0]2014 [1]mes [2]dia 
+
 			foreach ($vencidos as $vence) {
 				$pagos_id[] = $vence->id;
 				\Session::put('pagos_id', $pagos_id);
@@ -330,10 +330,11 @@ public function postPayment($type){
 			$pagos_data = \Session::get('pagos_data');
 			$id_site = \Session::get('id_site');
 			$message = 'Su pago ha sido registrado. Gracias.';
+			$fecha_pago = date("Y-m-d");
 
 			if(!empty($pagos_id)){
 				foreach ($pagos_id as $pago) {
-					DB::table('pagos')->where('id', $pago)->update(['status' => 1]);
+					DB::table('pagos')->where('id', $pago)->update(['status' => 1, 'fecha_pago'=> $fecha_pago]);
 					DB::table('sites_users')->where('id_user',$this->auth->user()->id)->where('id_site', $id_site )->update(['status' => 1]);
 				}
 			}else if(!empty($pagos_data)){
@@ -341,6 +342,7 @@ public function postPayment($type){
 				$user_type = Sites_users::where('id_site',$id_site)->where('id_user', $this->auth->user()->id)->value('type');
         		$cuota = Cuotas::find($user_type);
         		$user = User::find($this->auth->user()->id);
+        		$fecha_pago = date("Y-m-d");
 
 				foreach ($pagos_data as $date){
 					DB::table('pagos')->insert([
@@ -349,7 +351,8 @@ public function postPayment($type){
 						'date' => $date,
 						'status' => 1,
 						'amount' => $cuota->amount,
-						'user_name' => $user->name
+						'user_name' => $user->name,
+						'fecha_pago' => $fecha_pago
 						]);
 				}
 

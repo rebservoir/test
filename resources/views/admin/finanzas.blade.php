@@ -87,10 +87,11 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 			$mes_ant=$mes_sel-1;
 			$year_ant=$year_sel;
 		}
+		$saldo_anterior=0;
 	/*--}}
 
 		@foreach($pagos as $pago)
-			{{--*/ 	$date_pago = explode("-", $pago->date);/*--}}
+			{{--*/ 	$date_pago = explode("-", $pago->fecha_pago);/*--}}
 			@if(($date_pago[1] == $mes_ant) && ($date_pago[0] == $year_ant))	
 				@if($pago->status == 1)
 					{{--*/ $ing = $ing + $pago->amount; /*--}}
@@ -106,6 +107,17 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 		@endforeach
 
 		{{--*/ $amount_ant = $ing - $egr; /*--}}
+
+		@foreach($egresos as $egreso)
+			{{--*/ $date = explode("-", $egreso->date) /*--}}
+				@if(($date[1] == $mes) && ($date[0] == $year))
+					{{--*/ $total_egresos .= $egreso->amount; /*--}}
+				@endif
+		@endforeach
+
+		{{--*/ $amount_ant = $ing - $egr; /*--}}
+
+
 		
     <script type="text/javascript">
         var paga = <?php echo $pagos_p ?>;
@@ -133,7 +145,7 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 		@endforeach
 
 		@foreach($pagos as $pago)
-			{{--*/ $date = explode("-", $pago->date) /*--}}
+			{{--*/ $date = explode("-", $pago->fecha_pago) /*--}}
 				@if(($date[1] == $mes) && ($date[0] == $year))
 					@if($pago->status == 1)
 						{{--*/ $total_ingresos = $total_ingresos + $pago->amount; /*--}}
@@ -141,23 +153,25 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				@endif
 		@endforeach
 
+		@foreach($saldos as $saldo)
+			{{--*/ $fecha_saldo = explode("-", $saldo->date); /*--}}
+				@if(($fecha_saldo[1] == $mes_ant) && ($fecha_saldo[0] == $year_ant))
+					{{--*/ $saldo_anterior .= $saldo->saldo; /*--}}
+				@endif
+		@endforeach
+
 			<tbody>								
 				<tr>
 					<td class="ingreso">
-						<h3>{{'$ '. number_format($total_ingresos,2) }}</h3>
+						<h3>{{'$ '. number_format($total_ingresos, 2) }}</h3>
 						<h4>Ingresos del Mes</h4>
 					</td>
 				</tr>
-				<tr>
-					<td class="anterior">
-						<h3>{{'$ '. number_format($amount_ant,2)}}</h3>
-						<h4>Saldo Mes Anterior</h4>
-					</td>
-				</tr>
-				<tr>
-					<td class="total">
-						<h3>{{'$ '. number_format( $total_ingresos - $amount_ant , 2) }}</h3>
-						<h4>Saldo Total</h4>
+				<tr> 
+						{{--*/ $money = number_format($total_egresos, 2) /*--}}
+					<td class="cifras2 egresos">
+						<h3>{{'-$ '.$money}}</h3>
+						<h4>Total de Egresos en el Mes</h4>
 					</td>
 				</tr>
 			</tbody>
@@ -169,12 +183,10 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 			<p style="margin-top: 185px;text-align: center;">Cargando grafica...</p>
 		</div>
 
-		
-			
 		<table class="table table-striped table-condensed">
 			<thead>
 				<th class="egremes">
-					<h4>Egresos del mes</h4>
+					<h4>Tabla de Egresos</h4>
 				</th>
 			</thead>
 
@@ -195,7 +207,6 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 							<td><p>{{$egreso->date}}</p></td>
 							<td><p>{{$egreso->concept}}</p></td>
 							<td><p>{{'$ '.$money}}</p></td>
-								{{--*/ $total_egresos = ($egreso->amount + $total_egresos)/*--}}
 															
 						@if($egreso->path=="")
 							<td><p>Sin archivo</p></td>
@@ -211,19 +222,32 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				<br>
 
 		<table class="table saldos table-striped table-condensed">
+
+			<thead>
+				<th class="egremes">
+					<h4>Saldos</h4>
+				</th>
+			</thead>
+
 			<tbody>
-				<tr> 
-						{{--*/ $money = number_format($total_egresos, 2) /*--}}
-					<td class="cifras2 egresos">
-						<h3>{{'$ '.$money}}</h3>
-						<h4>Total de Egresos en el Mes</h4>
+				<tr>
+					<td class="">
+						<h3>{{'$ '. number_format($saldo_anterior,2)}}</h3>
+						<h4>Saldo Mes Anterior</h4>
 					</td>
 				</tr>
 				<tr>
-						{{--*/ $money = number_format(($total_ingresos - $total_egresos), 2) /*--}}
-					<td class="cifras2 saldo">	
-						<h3>{{'$ '.$money}}</h3>
-						<h4>Saldo</h4>
+					<td class="">
+						{{--*/ $saldo_mes = $total_ingresos - $total_egresos; /*--}}
+						<h3>{{'$ '. number_format($saldo_mes,2) }}</h3>
+						<h4>Saldo del mes</h4>
+					</td>
+				</tr>
+				<tr>
+						{{--*/ $saldo_total = $saldo_anterior + $saldo_mes; /*--}}
+					<td class="total">	
+						<h3>{{'$ '. number_format($saldo_total,2) }}</h3>
+						<h4>Saldo total</h4>
 					</td>
 				</tr>
 			</tbody>

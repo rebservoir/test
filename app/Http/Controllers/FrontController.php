@@ -166,6 +166,7 @@ class FrontController extends Controller
         $id_site = \Session::get('id_site');
         $id_user = $this->auth->user()->id;
         $user_role = Sites_users::where('id_site',$id_site)->where('id_user',$id_user)->value('role');
+        $saldos = Saldos::where('id_sitio',$id_site)->get();
 
         if(!$mes_sel)
             $mes_sel = date('n');
@@ -178,9 +179,9 @@ class FrontController extends Controller
         $sitios = Sites::where('id', $id_site)->get();
 
         if($user_role == 1){
-            return view('admin/finanzas', ['current' => $current,'pagos' => $pagos,'egresos' => $egresos, 'mes_sel' => $mes_sel, 'year_sel' => $year_sel, 'sites' => $sites, 'sitios' => $sitios ]);
+            return view('admin/finanzas', ['current' => $current,'pagos' => $pagos,'egresos' => $egresos, 'saldos' => $saldos, 'mes_sel' => $mes_sel, 'year_sel' => $year_sel, 'sites' => $sites, 'sitios' => $sitios ]);
         }else{
-            return view('finanzas', ['current' => $current,'pagos' => $pagos,'egresos' => $egresos, 'mes_sel' => $mes_sel, 'year_sel' => $year_sel, 'sites' => $sites, 'sitios' => $sitios ]);     
+            return view('finanzas', ['current' => $current,'pagos' => $pagos,'egresos' => $egresos, 'saldos' => $saldos, 'mes_sel' => $mes_sel, 'year_sel' => $year_sel, 'sites' => $sites, 'sitios' => $sitios ]);     
         }  
     }
 
@@ -383,20 +384,36 @@ class FrontController extends Controller
 
     public function corte_finanzas(){
 
-      $d=;
-      $m=;
-      $y=;
+        $d='01';
+        $m='08';
+        $y='2016';
+        $fecha = $y.'-'.$m.'-'.$d;
 
-      $msg = "";
+        $id_site = \Session::get('id_site');
+        $pagos = Pagos::where('id_site', $id_site )->where('fecha_pago', '>=', $fecha)->get();
+        $egresos = Egresos::where('id_site', $id_site )->where('date', '>=', $fecha)->get();
 
-      $data = [ 'msg'=> $msg, 'subj'=> 'Corte finanzas', 'user_mail' => 'reb_189@hotmail.com'];
+        $total_ingresos = 0;
+        $total_egresos = 0;
+        $saldo = 0;
 
-        Mail::send('emails.msg',$data, function ($msj) use ($data) {
-            $msj->subject($data['subj']);
-            $msj->to($data['user_mail']);
-        });
+        foreach($pagos as $pago){
+           $total_ingresos .= $pago->amount;
+        }
+        foreach($egresos as $egreso){
+           $total_egresos .= $egreso->amount;
+        }
+
+        $saldo = $total_ingresos - $total_egresos;
+
+        DB::table('saldos')->insert(
+                            [  
+                                'id_sitio' => $id_site,
+                                'saldo' => $saldo,
+                                'date' => $fecha;
+                            ]);
+
     }
-
 
     public function test(){
         \Log::info('I was here @ ' . \Carbon\Carbon::now());

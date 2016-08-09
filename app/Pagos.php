@@ -10,6 +10,6 @@ class Pagos extends Model
 
     public $timestamps = true;
 
-    protected $fillable = ['id_user','date','status','amount','user_name','id_site'];
+    protected $fillable = ['id_user','date','status','amount','fecha_pago','user_name','id_site'];
 
 }
