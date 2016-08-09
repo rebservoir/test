@@ -410,7 +410,7 @@ class FrontController extends Controller
                             [  
                                 'id_sitio' => $id_site,
                                 'saldo' => $saldo,
-                                'date' => $fecha;
+                                'date' => $fecha
                             ]);
 
     }
