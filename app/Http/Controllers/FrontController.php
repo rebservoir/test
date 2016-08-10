@@ -383,10 +383,12 @@ class FrontController extends Controller
     }
 
     public function corte_finanzas(){
-
+        
         $d='01';
-        $m='08';
-        $y='2016';
+        //$m='08';
+        //$y='2016';
+        $m = date("Y");
+        $y = date('m');
         $fecha = $y.'-'.$m.'-'.$d;
 
         $id_site = \Session::get('id_site');

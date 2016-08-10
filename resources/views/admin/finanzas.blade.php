@@ -136,12 +136,14 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 				@endif
 		@endforeach
 
-		@foreach($saldos as $saldo)
+		@if($saldos)
+			@foreach($saldos as $saldo)
 			{{--*/ $fecha_saldo = explode("-", $saldo->date); /*--}}
 				@if(($fecha_saldo[1] == $mes_ant) && ($fecha_saldo[0] == $year_ant))
 					{{--*/ $saldo_anterior .= $saldo->saldo; /*--}}
 				@endif
-		@endforeach
+			@endforeach
+		@endif
 
 			<tbody>								
 				<tr>
