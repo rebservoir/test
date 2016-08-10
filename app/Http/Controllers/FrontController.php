@@ -383,37 +383,50 @@ class FrontController extends Controller
     }
 
     public function corte_finanzas(){
-        
+ 
         $d='01';
         //$m='08';
         //$y='2016';
-        $m = date("Y");
-        $y = date('m');
+        $m = date("m");
+        $y = date("Y");
         $fecha = $y.'-'.$m.'-'.$d;
 
-        $id_site = \Session::get('id_site');
-        $pagos = Pagos::where('id_site', $id_site )->where('fecha_pago', '>=', $fecha)->get();
-        $egresos = Egresos::where('id_site', $id_site )->where('date', '>=', $fecha)->get();
+        $sitios = DB::table('sites')->lists('id');
 
-        $total_ingresos = 0;
-        $total_egresos = 0;
-        $saldo = 0;
+        foreach ($sitios as $sitio) {
+            $id_site = $sitio;
+           
+            $pagos = Pagos::where('id_site', $id_site )->where('fecha_pago', '>=', $fecha)->get();
+            $egresos = Egresos::where('id_site', $id_site )->where('date', '>=', $fecha)->get();
 
-        foreach($pagos as $pago){
-           $total_ingresos .= $pago->amount;
+            $total_ingresos = 0;
+            $total_egresos = 0;
+            $saldo = 0;
+
+            foreach($pagos as $pago){
+               $total_ingresos .= $pago->amount;
+            }
+            foreach($egresos as $egreso){
+               $total_egresos .= $egreso->amount;
+            }
+
+            $saldo = $total_ingresos - $total_egresos;
+         
+            DB::table('saldos')->insert(
+                                [  
+                                    'id_sitio' => $id_site,
+                                    'saldo' => $saldo,
+                                    'date' => $fecha
+                                ]);
+
+            $data = [ 'msg'=> 'finanzas' , 'subj'=> 'finanzas', 'user_mail' => 'reb_189@hotmail.com'];
+
+            Mail::send('emails.msg',$data, function ($msj) use ($data) {
+                $msj->subject($data['subj']);
+                $msj->to($data['user_mail']);
+            });
+
         }
-        foreach($egresos as $egreso){
-           $total_egresos .= $egreso->amount;
-        }
-
-        $saldo = $total_ingresos - $total_egresos;
-
-        DB::table('saldos')->insert(
-                            [  
-                                'id_sitio' => $id_site,
-                                'saldo' => $saldo,
-                                'date' => $fecha
-                            ]);
 
     }
 

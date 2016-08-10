@@ -99,7 +99,7 @@ class PagosController extends Controller
 
                             if($request->status == 0){
                               $status = 'Adeudo';
-                            }elseif($request->statu == 1){
+                            }elseif($request->status == 1){
                               $status = 'Pagado';
                             }else{
                              $status = 'Pendiente';
@@ -157,7 +157,7 @@ class PagosController extends Controller
 
                             if($request->status == 0){
                               $status = 'Adeudo';
-                            }elseif($request->statu == 1){
+                            }elseif($request->status == 1){
                               $status = 'Pagado';
                             }else{
                              $status = 'Pendiente';
@@ -330,24 +330,22 @@ class PagosController extends Controller
                       //obtener el amount de la cuota
                       $cuota = Cuotas::find($user->type);
 
-                        
                         DB::table('pagos')->insert(
                           ['id_user'    => $user->id,
                            'date'       => $date,
-                           'status'     => 0,
+                           'status'     => 2,
                            'amount'     => $cuota->amount,
                            'user_name'  => $user->name, //$user->name,
                            'id_site'    => $id_site //$id_site
                           ]);
                         
-  
                         $sitio = Sites::find($id_site);
                         $concepto = $meses[intval($month)] . '-' . $year;
                         $importe = '$'.number_format($cuota->amount, 2, '.', '00');
-                        $status = $status = '<span class="label ecxlabel-danger" style="background-color: #d9534f;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Adeudo</span>';
+                        $status = $status = '<span class="label" style="background-color: #00bcd4;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
                         $descuento = '$'.number_format(  0 , 2, '.', '00');
 
-                        $data =['subj'      =>  'Nuevo pago pendiente', 
+                        $data =['subj'      =>  'Nuevo pago pendiente - no existe', 
                                 'user_mail' =>  $user->email,
                                 'usuario'   =>  $user->name,
                                 'site'      =>  $sitio->name,
@@ -378,7 +376,7 @@ class PagosController extends Controller
                         DB::table('pagos')->insert(
                           ['id_user'    => $user->id,
                            'date'       => $date,
-                           'status'     => 0,
+                           'status'     => 2,
                            'amount'     => $cuota->amount,
                            'user_name'  => $user->name, //$user->name,
                            'id_site'    => $id_site //$id_site
@@ -388,10 +386,10 @@ class PagosController extends Controller
                         $sitio = Sites::find($id_site);
                         $concepto = $meses[intval($month)] . '-' . $year;
                         $importe = '$'.number_format($cuota->amount, 2, '.', '00');
-                        $status = $status = '<span class="label ecxlabel-danger" style="background-color: #d9534f;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Adeudo</span>';
+                        $status = $status = '<span class="label" style="background-color: #00bcd4;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
                         $descuento = '$'.number_format(  0 , 2, '.', '00');
 
-                        $data =['subj'      =>  'Nuevo pago pendiente', 
+                        $data =['subj'      =>  'Nuevo pago pendiente - no pagos', 
                                 'user_mail' =>  $user->email,
                                 'usuario'   =>  $user->name,
                                 'site'      =>  $sitio->name,
@@ -421,16 +419,21 @@ class PagosController extends Controller
       //obtener sitios
       $sitios = DB::select('select * FROM sites');
       //obtener usuarios por sitio
-      foreach ($sitios as $key => $sitio){
+      foreach ($sitios as $sitio){
         $users = DB::select('select users.*, sites_users.status, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_site = :id AND sites_users.role = 0', ['id' => $sitio->id]);
           
-          foreach ($users as $key => $user){
+          foreach ($users as $user){
             //obtener ultimo pago
-            $ultimo_pago = DB::select('select status FROM pagos WHERE id_user = :id_user AND id_site = :id_site ORDER BY date desc LIMIT 1', ['id_site' => $sitio->id, 'id_user' => $user->id]);
+            $ultimo_pago = DB::table('pagos')->where('id_user', $user->id)->where('id_site',$sitio->id)->orderBy('date', 'desc')->take(1)->get();
               if(!empty($ultimo_pago)){ //tiene pagos
-                  foreach ($ultimo_pago as $key => $pago){
-                    if($pago->status == 0){
+                  foreach ($ultimo_pago as $pago){
+                    if(($pago->status == 0) or ($pago->status == 2) ){
                       //\Log::info('Sitio:' . $sitio->id . 'user:' . $user->name . '- Adeudo');
+
+                      if($pago->status == 2){
+                        DB::table('pagos')->where('id', $pago->id)->update(['status' => 0]);
+                      }
+
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 0]);
 
                       $status = '<span class="label ecxlabel-danger" style="background-color: #d9534f;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Adeudo</span>';

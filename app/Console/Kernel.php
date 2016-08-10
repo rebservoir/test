@@ -46,6 +46,8 @@ class Kernel extends ConsoleKernel
         //$schedule->call('TuFracc\Http\Controllers\FrontController@test')->everyMinute();
         //$schedule->call('TuFracc\Http\Controllers\PagosController@corte')->everyMinute();  
         //$schedule->call('TuFracc\Http\Controllers\PagosController@limite')->everyMinute();  
+        //$schedule->call('TuFracc\Http\Controllers\FrontController@corte_finanzas')->everyMinute(); 
+         
 
         
 
