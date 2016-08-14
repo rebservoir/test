@@ -300,35 +300,31 @@ class PagosController extends Controller
       //obtener sitios
       $sitios = DB::select('select * FROM sites');
       //obtener usuarios por sitio
-      foreach ($sitios as $key => $sitio){
+      foreach ($sitios as $sitio){
         //Para cada sitio 
         $id_site = $sitio->id;
 
         //para cada sitio obtener usuarios y pagos (solo users, no admins)
         $users = DB::select('select users.*, sites_users.status, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_site = :id AND sites_users.role = 0', ['id' => $id_site]);
 
-        foreach ($users as $key => $user){
+        foreach ($users as $user){
 
-          $fechas_pagos = DB::select('select date FROM pagos WHERE id_user = :id_user AND id_site = :id_site ORDER BY date desc', ['id_site' => $id_site, 'id_user' => $user->id]);
+          $fecha_pago = Pagos::where('id_user', $user->id)->where('id_site', $id_site)->orderBy('date', 'desc')->take(1);
           $existe = false;
-            if(!empty($fechas_pagos)){ //tiene pagos
-              foreach ($fechas_pagos as $key => $fecha) {
+
+            if(count($fecha_pago)>0){ //tiene pagos
+
+              foreach ($fecha_pago as $fecha){
                 $fecha_p = explode("-", $fecha->date);
                   if(($fecha_p[0] == $year) && ($fecha_p[1] == $month)){
                     $existe=true;
-                    break;
                   }//end if
               }//foreach $fechas_pagos
 
-              if($existe){//existe y no se crea
-                  //\Log::info($fecha_p[0].'='.$year.'--'.$fecha_p[1].'='.$month.'-Existe');
-                  //\Log::info('sitio:'.$sitio->name.'- user:' . $user->name . '- ya existe');
-              }else{//No existe y se crea
+              if($existe==false){//No existe y se crea
 
-                //\Log::info($fecha_p[0].'='.$year.'--'.$fecha_p[1].'='.$month.'-Crear pago');
-                //\Log::info('sitio:'. $sitio->name .'- user:' . $user->name . '- Crear pago');
-                      //obtener el amount de la cuota
-                      $cuota = Cuotas::find($user->type);
+                //obtener el amount de la cuota
+                $cuota = Cuotas::find($user->type);
 
                         DB::table('pagos')->insert(
                           ['id_user'    => $user->id,
@@ -366,48 +362,6 @@ class PagosController extends Controller
                         });
                         
               }
-            }else{ //no tiene pagos
-              \Log::info($fecha_p[0].'='.$year.'--'.$fecha_p[1].'='.$month.'- Crear pago');
-              //\Log::info('sitio:'. $sitio->name .'- user:' . $user->name . '- Crear pago');
-
-                    $cuota = Cuotas::find($user->type);
-
-                        
-                        DB::table('pagos')->insert(
-                          ['id_user'    => $user->id,
-                           'date'       => $date,
-                           'status'     => 2,
-                           'amount'     => $cuota->amount,
-                           'user_name'  => $user->name, //$user->name,
-                           'id_site'    => $id_site //$id_site
-                          ]);
-                        
-
-                        $sitio = Sites::find($id_site);
-                        $concepto = $meses[intval($month)] . '-' . $year;
-                        $importe = '$'.number_format($cuota->amount, 2, '.', '00');
-                        $status = $status = '<span class="label" style="background-color: #00bcd4;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
-                        $descuento = '$'.number_format(  0 , 2, '.', '00');
-
-                        $data =['subj'      =>  'Nuevo pago pendiente - no pagos', 
-                                'user_mail' =>  $user->email,
-                                'usuario'   =>  $user->name,
-                                'site'      =>  $sitio->name,
-                                'status'    =>  $status,
-                                'fecha'     =>  $date,
-                                'name'      =>  $user->name,
-                                'address'   =>  $user->address,
-                                'concepto'  =>  $concepto,
-                                'cuota'     =>  $importe,
-                                'descuento' =>  $descuento,
-                                'importe'   =>  $importe
-                                ];
-                           
-                        Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
-                          $msj->subject($data['subj']);
-                          $msj->to($data['user_mail']);
-                        });
-                    
             }
         } //fin foreach $user
       }//end foreach sitio
@@ -460,7 +414,7 @@ class PagosController extends Controller
                       //Se actualiza a corriente
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 1]);
                     }
-                    
+
                   }
               }
           }

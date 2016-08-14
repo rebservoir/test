@@ -225,7 +225,7 @@ $status = 1;
           <thead>
             <tr>
               <th>Concepto</th>
-              <th>Precio Unitario</th>
+              <th>Cuota</th>
               <th>Descuento</th>
               <th>Importe</th>
             </tr>
