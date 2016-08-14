@@ -314,12 +314,10 @@ class PagosController extends Controller
 
             if(count($fecha_pago)>0){ //tiene pagos
 
-              foreach ($fecha_pago as $fecha){
-                $fecha_p = explode("-", $fecha->date);
-                  if(($fecha_p[0] == $year) && ($fecha_p[1] == $month)){
-                    $existe=true;
-                  }//end if
-              }//foreach $fechas_pagos
+              $fecha_p = explode("-", $fecha_pago[0]->date);
+                if(($fecha_p[0] == $year) && ($fecha_p[1] == $month)){
+                  $existe=true;
+                }//end if
 
               if($existe==false){//No existe y se crea
 
@@ -341,7 +339,7 @@ class PagosController extends Controller
                         $status = $status = '<span class="label" style="background-color: #00bcd4;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
                         $descuento = '$'.number_format(  0 , 2, '.', '00');
 
-                        $data =['subj'      =>  'Nuevo pago pendiente - no existe', 
+                        $data =['subj'      =>  'Nuevo pago pendiente', 
                                 'user_mail' =>  $user->email,
                                 'usuario'   =>  $user->name,
                                 'site'      =>  $sitio->name,
@@ -361,6 +359,15 @@ class PagosController extends Controller
                           $msj->to($data['user_mail']);
                         });
                         
+              }else{
+
+                $data = [ 'msg'=> 'Ya esta creado', 'subj'=> 'Ya esta creado', 'user_mail' => 'reb_189@hotmail.com'];
+
+                Mail::send('emails.msg',$data, function ($msj) use ($data) {
+                    $msj->subject($data['subj']);
+                    $msj->to($data['user_mail']);
+                });
+                
               }
             }
         } //fin foreach $user
