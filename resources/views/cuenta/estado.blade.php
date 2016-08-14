@@ -67,9 +67,9 @@ $status = 1;
     <tr>
       <td><p>Status de Pago:</p></td>
         <td><h3 style="margin-top: 10px">
-          @if($status == 1)
+          @if($status == 0)
             <span class="label label-danger">Adeudo</span>
-          @elseif($status == 0)
+          @elseif($status == 1)
             <span class="label label-success">Al corriente</span>
           @else
             <span class="label label-pendiente">Pendiente</span>
@@ -198,7 +198,7 @@ $status = 1;
                 <td><h3 style="margin-top:10px;">
                   @if($pago->status == 0)
                     <span class="label label-danger">Adeudo</span>
-                  @elseif($pago->status == 0)
+                  @elseif($pago->status == 1)
                     <span class="label label-success">Saldado</span>
                   @else
                     <span class="label label-pendiente">Pendiente</span>

@@ -96,7 +96,7 @@ class UsuarioController extends Controller
                  'id_site' => $id_site,
                  'type' => $request->type,
                  'role' => $request->role,
-                 'status' => 0 
+                 'status' => 1
                  ]);
 
             //email invitacion

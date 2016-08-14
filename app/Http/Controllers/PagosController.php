@@ -421,43 +421,47 @@ class PagosController extends Controller
       //obtener usuarios por sitio
       foreach ($sitios as $sitio){
         $users = DB::select('select users.*, sites_users.status, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_site = :id AND sites_users.role = 0', ['id' => $sitio->id]);
-          
+          //para cada user del sitio
           foreach ($users as $user){
             //obtener ultimo pago
             $ultimo_pago = DB::table('pagos')->where('id_user', $user->id)->where('id_site',$sitio->id)->orderBy('date', 'desc')->take(1)->get();
               if(!empty($ultimo_pago)){ //tiene pagos
                   foreach ($ultimo_pago as $pago){
+                    //si es adeudo o pendiente
                     if(($pago->status == 0) or ($pago->status == 2) ){
-                      //\Log::info('Sitio:' . $sitio->id . 'user:' . $user->name . '- Adeudo');
 
+                      //si es pendiente se cambia a adeudo
                       if($pago->status == 2){
                         DB::table('pagos')->where('id', $pago->id)->update(['status' => 0]);
                       }
 
+                      //Actualizar el status de usuario a Adedudo
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 0]);
 
+                      //label de Adeudo
                       $status = '<span class="label ecxlabel-danger" style="background-color: #d9534f;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Adeudo</span>';
 
+                      //Data del mail
                       $data =['subj'      =>  'Limite de pago', 
                               'user_mail' =>  $user->email,
                               'usuario'   =>  $user->name,
                               'sitio'      => $sitio->name,
                               'status'    =>  $status
                               ];
-    
+                      
+                      //Se envia el mail
                       Mail::send('emails.limite',$data, function ($msj) use ($data) {
                         $msj->subject($data['subj']);
                         $msj->to($data['user_mail']);
                       });
                     
 
-                    }else if($pago->status == 1){
-                      //\Log::info('Sitio:' . $sitio->id . 'user:' . $user->name . '- Corriente');
+                    }else if($pago->status == 1){ //si status es corriente
+                      //Se actualiza a corriente
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 1]);
                     }
+                    
                   }
-              }else{ //no tiene pagos
-                //\Log::info('Sitio:' . $sitio->id . 'user:' . $user->name . '- No pagos');
               }
           }
       }
