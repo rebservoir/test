@@ -96,7 +96,7 @@ class UsuarioController extends Controller
                  'id_site' => $id_site,
                  'type' => $request->type,
                  'role' => $request->role,
-                 'status' => 1  
+                 'status' => 0 
                  ]);
 
             //email invitacion
@@ -361,10 +361,12 @@ class UsuarioController extends Controller
         }else if($sort == 'all'){
             $users = $users;
         }else if($sort == 'adeudo'){
-            $users = $users->where('status', 0);
+            $users = DB::select('select users.*, sites_users.status, sites_users.role, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.status = :status', ['status' => 0 ]);
         }else if($sort == 'corriente'){
-            $users = $users->where('status', 1);
-        }                
+            $users = DB::select('select users.*, sites_users.status, sites_users.role, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.status = :status', ['status' => 1 ]);
+        }else if($sort == 'admin'){
+            $users = DB::select('select users.*, sites_users.status, sites_users.role, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.role = :type', ['type' => 1 ]);
+        }                 
             return view('/admin/usuarios', ['current' => $current, 'users' => $users, 'tipos' => $tipos, 'user_count' => $user_count, 'plan'=>$plan, 'sitios' => $sitios, 'sites' => $sites ]);
     }
 

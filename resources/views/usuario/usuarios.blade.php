@@ -24,6 +24,7 @@
 								<option value="all">Todos</option>
 								<option value="adeudo">Adeudo</option>
 								<option value="corriente">Corriente</option>
+								<option value="admin">Admin</option>
 							</select></th>
 						<th>Editar</th>
 						<th>Pagos</th>

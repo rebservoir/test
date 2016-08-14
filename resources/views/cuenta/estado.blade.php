@@ -61,16 +61,18 @@ $status = 1;
 <table class="table table-bordered table-striped table-condensed ">
   <tbody>
     <tr>
-      <td><p>Cliente: </p></td>
+      <td><p>Usuario: </p></td>
       <td><p>{!!Auth::user()->name!!}</p></td>
     </tr>
     <tr>
       <td><p>Status de Pago:</p></td>
         <td><h3 style="margin-top: 10px">
-          @if($status == 0)
+          @if($status == 1)
             <span class="label label-danger">Adeudo</span>
-          @else
+          @elseif($status == 0)
             <span class="label label-success">Al corriente</span>
+          @else
+            <span class="label label-pendiente">Pendiente</span>
           @endif
           </h3>
       </td>
@@ -209,7 +211,7 @@ $status = 1;
               <td>{{ $date[2] . "-" . $month[$cxd-1] . "-" . $date[0]}}</td>
             </tr>
             <tr>
-              <td><strong>Cliente:</strong></td>
+              <td><strong>Usuario:</strong></td>
               <td>{{Auth::user()->name}}</td>
             </tr>
             <tr>
