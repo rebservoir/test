@@ -70,6 +70,11 @@ class PagosController extends Controller
             $newDate = explode("-", $request->date);
             $flag=true;
             $meses = array("x","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+            $year = date('Y');
+            $month = date('m');
+            $day = date('d');
+            $fecha = $year.'-'.$month.'-'.$day;
+            $monto = $cuota->amount;
 
             $site = DB::table('sites')->where('id', $id_site)->value('name');
             $y = $newDate[0];
@@ -88,22 +93,26 @@ class PagosController extends Controller
 
             if(empty($pagos)){
 
+                if($request->status == 0){
+                  $status = 'Adeudo';
+                  $monto = $monto + $cuota->retardo;
+                }elseif($request->status == 1){
+                  $status = 'Pagado';
+                }else{
+                  $status = 'Pendiente';
+                }
+
                  DB::table('pagos')->insert(
                             [   'id_user' => $id_user,
                                 'date' => $request->date,
                                 'status' => $request->status,
-                                'amount' => $cuota->amount,
+                                'amount' => $monto,
+                                'fecha_pago' => $fecha,
                                 'user_name' => $user->name,
                                 'id_site' => $id_site
                             ]);
 
-                            if($request->status == 0){
-                              $status = 'Adeudo';
-                            }elseif($request->status == 1){
-                              $status = 'Pagado';
-                            }else{
-                             $status = 'Pendiente';
-                            }
+                            
 
                             $importe = '$'.number_format($cuota->amount, 2, '.', '');
 
@@ -146,22 +155,27 @@ class PagosController extends Controller
                             $next_y = intval($ultimo_pago[0]);
                         }
 
-                            DB::table('pagos')->insert(
-                            [   'id_user' => $id_user,
-                                'date' => $request->date,
-                                'status' => $request->status,
-                                'amount' => $cuota->amount,
-                                'user_name' => $user->name,
-                                'id_site' => $id_site
-                            ]);
-
-                            if($request->status == 0){
+                           if($request->status == 0){
                               $status = 'Adeudo';
+                              $monto = $monto + $cuota->retardo;
                             }elseif($request->status == 1){
                               $status = 'Pagado';
                             }else{
                              $status = 'Pendiente';
                             }
+
+
+                            DB::table('pagos')->insert(
+                            [   'id_user' => $id_user,
+                                'date' => $request->date,
+                                'status' => $request->status,
+                                'amount' => $monto,
+                                'fecha_pago' => $fecha,
+                                'user_name' => $user->name,
+                                'id_site' => $id_site
+                            ]);
+
+                           
 
                             $importe = '$'.number_format($cuota->amount, 2, '.', '');
 
@@ -249,8 +263,49 @@ class PagosController extends Controller
     public function update(PagoUpdateRequest $request, $id)
     {
         $pago = Pagos::find($id);
-        $pago->fill($request->all());
-        $pago->save();
+
+        $status = $request->status;
+
+        if($status==0){ 
+          //adeudo
+          $id_site = $pago->id_site;
+          $id_user = $request->id_user;
+          $type = DB::table('sites_users')->where('id_site', $id_site)->where('id_user', $id_user)->value('type');
+          $cuota = Cuotas::find($type);
+          $retardo = $cuota->retardo;
+          $monto = $request->amount;
+          $nuevo_monto = $monto + $retardo;
+
+          if($monto == $cuota->amount) {
+            $monto = $nuevo_monto;
+          }
+
+          DB::table('pagos')
+            ->where('id', $id)
+            ->update([ 'id_user' => $request->id_user,
+                       'date' => $request->date,
+                       'status' => $status,
+                       'amount' => $monto,
+                       'user_name' => $request->user_name
+              ]);
+
+        }elseif($status==1){
+          $pago->fill($request->all());
+
+          $year = date('Y');
+          $month = date('m');
+          $day = date('d');
+          $fecha = $year.'-'.$month.'-'.$day;
+
+          DB::table('pagos')
+            ->where('id', $id)
+            ->update([ 'fecha_pago' => $fecha]);
+          $pago->save();
+        }
+
+
+        
+        
 
         \Session::flash('update', 'Pago actualizado exitosamente.');
 
@@ -301,6 +356,7 @@ class PagosController extends Controller
       $sitios = DB::select('select * FROM sites');
       //obtener usuarios por sitio
       foreach ($sitios as $sitio){
+
         //Para cada sitio 
         $id_site = $sitio->id;
 
@@ -367,7 +423,7 @@ class PagosController extends Controller
                     $msj->subject($data['subj']);
                     $msj->to($data['user_mail']);
                 });
-                
+
               }
             }
         } //fin foreach $user

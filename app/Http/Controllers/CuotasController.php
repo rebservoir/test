@@ -48,6 +48,7 @@ class CuotasController extends Controller
             DB::table('cuotas')->insert(
                 ['concepto' => $request->concepto,
                  'amount' => $request->amount,
+                 'retardo' => $request->retardo,
                  'id_site' => $id_site
                 ]);
 

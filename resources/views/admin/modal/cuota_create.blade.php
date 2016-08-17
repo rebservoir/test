@@ -19,6 +19,10 @@
 					{!!Form::label('*Monto:')!!}
 					{!!Form::text('monto',null,['id'=>'monto_cuota','class'=>'form-control','placeholder'=>'Ingresar monto'])!!}
 				</div>
+				<div class="form-group">
+					{!!Form::label('Retardo:')!!}
+					{!!Form::text('retardo',null,['id'=>'retardo_cuota','class'=>'form-control','placeholder'=>'Ingresar retardo (si existe)'])!!}
+				</div>
 			</div>
 
 				<div class="modal-footer">

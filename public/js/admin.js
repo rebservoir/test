@@ -426,6 +426,7 @@ function mostrar_cuota(btn){
     $.get(route, function(res){
         $("#concept_cuota1").val(res.concepto);
         $("#monto_cuota1").val(res.amount);
+        $("#retardo_cuota1").val(res.retardo);
         $("#id_cuota1").val(res.id);
     });
 }
@@ -437,6 +438,7 @@ $("#registrar_cuota").click(function(){
 
     var dato1 = $("#concept_cuota").val();
     var dato2 = $("#monto_cuota").val();
+    var dato3 = $("#retardo_cuota").val();
     var route = "cuotas";
     var token = $("#token_cuota").val();
 
@@ -445,7 +447,7 @@ $("#registrar_cuota").click(function(){
         headers: {'X-CSRF-TOKEN': token},
         type: 'POST',
         dataType: 'json',
-        data:{concepto: dato1, amount: dato2},
+        data:{concepto: dato1, amount: dato2, retardo: dato3},
 
         success:function(){
             $("#msj-success").removeClass("hide");
@@ -478,6 +480,7 @@ $("#actualizar_cuota").click(function(){
     var value = $("#id_cuota1").val();
     var dato1 = $("#concept_cuota1").val();
     var dato2 = $("#monto_cuota1").val();
+    var dato3 = $("#retardo_cuota1").val();
 
     var route = "/cuotas/"+value+"";
     var token = $("#token_cuota1").val();
@@ -487,7 +490,7 @@ $("#actualizar_cuota").click(function(){
         headers: {'X-CSRF-TOKEN': token},
         type: 'PUT',
         dataType: 'json',
-        data:{concepto: dato1, amount: dato2},
+        data:{concepto: dato1, amount: dato2, retardo: dato3},
 
         success:function(){
             $("#msj-success").removeClass("hide");

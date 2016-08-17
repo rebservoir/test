@@ -61,6 +61,7 @@ $month = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 
 				<br><br>
 
+
 	{{--*/ $pagos_num=0; $pagos_p=0; $pagos_a=0; /*--}}
 		@foreach($pagos as $pago)
 			{{--*/ 	$date_pago = explode("-", $pago->date);/*--}}

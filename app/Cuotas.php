@@ -10,5 +10,5 @@ class Cuotas extends Model
 
     public $timestamps = false;
 
-    protected $fillable = ['concepto','amount','id_site'];
+    protected $fillable = ['concepto','amount','id_site','retardo'];
 }

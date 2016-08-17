@@ -19,7 +19,10 @@
 					{!!Form::label('*Monto:')!!}
 					{!!Form::text('monto',null,['id'=>'monto_cuota1','class'=>'form-control','placeholder'=>'Ingresar monto'])!!}
 				</div>
-		
+				<div class="form-group">
+					{!!Form::label('Retardo:')!!}
+					{!!Form::text('retardo',null,['id'=>'retardo_cuota1','class'=>'form-control','placeholder'=>'Ingresar retardo (si existe)'])!!}
+				</div>
 			</div>
 			<div class="modal-footer">
 				<div class="requeridos"><p>*Campos requeridos.</p></div>

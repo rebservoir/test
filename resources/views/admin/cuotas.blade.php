@@ -16,6 +16,7 @@
 		<thead>
 			<th>Concepto</th>
 			<th>Monto</th>
+			<th>Retardo</th>
 			<th>Editar</th>
 		</thead>
 		<tbody>
@@ -23,6 +24,7 @@
 				<tr>
 					<td><p>{{$cuota->concepto}}</p></td>
 					<td><p>{{ '$ '. number_format($cuota->amount, 2) }}</p></td>
+					<td><p>{{ '$ '. number_format($cuota->retardo, 2) }}</p></td>
 					<td><button value='{{$cuota->id}}' OnClick='mostrar_cuota(this);' class='btn btn-primary' data-toggle="modal" data-target="#cuota_edit" data_value="{{$cuota->id}}">Editar</button></td>
 				</tr>
 			@endforeach
