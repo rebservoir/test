@@ -454,8 +454,9 @@ class PagosController extends Controller
 
                       //incrementar el retardo
                       $retardo = DB::table('cuotas')->where('id_site',$sitio->id)->where('id', $user->type)->value('retardo');
-                      $nuevo = $pago->amount + $retardo;
-                      DB::table('pagos')->where('id', $pago->id)->update(['amount' => $retardo]);
+                      $cuota = DB::table('cuotas')->where('id_site',$sitio->id)->where('id', $user->type)->value('amount');
+                      $nuevo =  $cuota + $retardo;
+                      DB::table('pagos')->where('id', $pago->id)->update(['amount' => $nuevo]);
 
                       //Actualizar el status de usuario a Adedudo
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 0]);
