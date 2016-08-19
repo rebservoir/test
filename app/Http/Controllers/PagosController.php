@@ -392,7 +392,7 @@ class PagosController extends Controller
                         $sitio = Sites::find($id_site);
                         $concepto = $meses[intval($month)] . '-' . $year;
                         $importe = '$'.number_format($cuota->amount, 2, '.', '00');
-                        $status = $status = '<span class="label" style="background-color: #00bcd4;display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
+                        $status = $status = '<span class="label" style="background-color: #00bcd4; display: inline;padding: .2em .6em .3em;font-weight: 600;line-height: 1;color: #fff;text-align: center;white-space: nowrap;vertical-align: baseline;border-radius: .25em;font-size: 14px;">Pendiente</span>';
                         $descuento = '$'.number_format(  0 , 2, '.', '00');
 
                         $data =['subj'      =>  'Nuevo pago pendiente', 
@@ -451,6 +451,11 @@ class PagosController extends Controller
                       if($pago->status == 2){
                         DB::table('pagos')->where('id', $pago->id)->update(['status' => 0]);
                       }
+
+                      //incrementar el retardo
+                      $retardo = DB::table('cuotas')->where('id_site',$sitio->id)->where('id', $user->type)->value('retardo');
+                      $nuevo = $pago->amount + $retardo;
+                      DB::table('pagos')->where('id', $pago->id)->update(['amount' => $retardo]);
 
                       //Actualizar el status de usuario a Adedudo
                       DB::table('sites_users')->where('id_site', $sitio->id)->where('id_user', $user->id)->update(['status' => 0]);
