@@ -289,7 +289,7 @@ $(".btn_g").click(function(){
 var t_adeudos=0,t_recargos=0,t_pendientes=0,t_descuento=0,total=0;
 
 function get_user(id){
-
+    t_adeudos=0,t_recargos=0,t_pendientes=0,t_descuento=0,total=0;
     var value = id;
     var route = "/getUser/"+value;
     var status='',st='',retardo=0,td_retardo='';
