@@ -138,7 +138,7 @@
             </tr>
           </tbody>
         </table>
-Cualquier duda o aclaración puedes mandar un correo a {!!$admin_email!!}<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
+Cualquier duda o aclaración contacta a la administración.<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 &nbsp;<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 Que tengas un excelente día.<br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 Atentamente, <br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"> Administración</span></h1>

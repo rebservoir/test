@@ -76,6 +76,8 @@ Route::get('admin/usuarios/add/{id?}','UsuarioController@add');
 Route::resource('admin/usuario/','UsuarioController');
 Route::get('detalle_pagos/{id?}','PagosController@detalle');
 Route::get('load','UsuarioController@loadData');
+Route::post('sendPago/{id_pago?}','PagosController@sendPago');
+Route::get('getUser/{id?}','UsuarioController@getUser');
 
 Route::get('sendEmail/{id?}/{tipo?}','MailController@sendEmail');
 Route::get('sendEmailMsg/{id?}','MailController@sendEmailMsg');

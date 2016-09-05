@@ -373,10 +373,10 @@ div#main_cont{
 }
 .publicidad{
     text-align: center;
-    background: #999;
+    background: #eeeded;
     height: 120px;
-    margin:0px 0px 30px 0px;
-    padding: 0px; 
+    margin: 0px 0px 30px 0px;
+    padding: 45px 0px;
 }
 .publicidad img{
     width: 100%;
@@ -385,6 +385,10 @@ div#main_cont{
 .cont_in_r{
     margin-left: 40px;
 }
+.label-pendiente{
+    background-color: #00bcd4;
+}
+
 
 /** CALENDARIO**/
 #calendar {
@@ -789,10 +793,6 @@ div#the-basics{
 .table-of-contents li a {
   font-size: 16px;
   color: #999;
-}
-
-p + p {
-  margin: 30px 0 0 0;
 }
 
 /* site theme */

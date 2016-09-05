@@ -201,13 +201,13 @@ public function postPayment($type){
 		//crear los items
 		foreach ($items_arr as $pago) {
 			$item = new Item();
-					$item->setName($pago)
-						->setCurrency($currency)
-						->setDescription('item description')
-						->setQuantity($qty)
-						->setPrice($price);
-					$items[] = $item;
-					$subtotal += $price * $qty;
+			   $item->setName($pago)
+					->setCurrency($currency)
+					->setDescription('item description')
+					->setQuantity($qty)
+					->setPrice($price);
+				$items[] = $item;
+				$subtotal += $price * $qty;
 		}
 
 		//descuento
@@ -235,11 +235,10 @@ public function postPayment($type){
 			->setTotal($total)
 			->setDetails($details);
 
-
 		$transaction = new Transaction();
 		$transaction->setAmount($amount)
 			->setItemList($item_list)
-			->setDescription('Pedido de prueba en mi Laravel App');
+			->setDescription('Pedido de prueba en billbox');
 
 		$redirect_urls = new RedirectUrls();
 		$redirect_urls->setReturnUrl(\URL::route('payment.status'))
@@ -341,6 +340,7 @@ public function postPayment($type){
 				
 				$user_type = Sites_users::where('id_site',$id_site)->where('id_user', $this->auth->user()->id)->value('type');
         		$cuota = Cuotas::find($user_type);
+        		$pagos = Pagos::find
         		$user = User::find($this->auth->user()->id);
         		$fecha_pago = date("Y-m-d");
 
@@ -358,6 +358,8 @@ public function postPayment($type){
 
 				DB::table('sites_users')->where('id_user',$this->auth->user()->id)->where('id_site', $id_site )->update(['status' => 1]);
 			}
+				
+			\Session::flash('update', 'Pago actualizado exitosamente.');
 				
 			return redirect()->to('micuenta')->with('message', $message);
 		}

@@ -231,12 +231,19 @@ $("#delete_pago").click(function(){
             headers: {'X-CSRF-TOKEN': token},
             type: 'DELETE',
             dataType: 'json',
-            success:function(){
-            $("#msj-success").removeClass("hide");
-            $("#msj-success").html("Pago eliminado exitosamente.");
-            $("#tablaPagos").load(location.href+" #tablaPagos>*","");
-            $('#pago_edit').modal('toggle');
-            hide_btn2();
+            success:function(data){
+                if(data.mensaje=='success'){
+                    $("#msj-success").removeClass("hide");
+                    $("#msj-success").html("Pago eliminado exitosamente.");
+                    $("#tablaPagos").load(location.href+" #tablaPagos>*","");
+                    $('#pago_edit').modal('toggle');
+                    hide_btn2();
+                }else if(data.mensaje=='fail'){
+                    $("#msj-fail").removeClass( "hide");
+                    $("#msj-fail").html("No se puede eliminar pago de mes anterior al actual.");
+                    $('#pago_edit').modal('toggle');
+                    hide_btn2();
+                } 
             },
             error: function (jqXHR, exception) {
                 $("#msj-fail").removeClass( "hide");
@@ -252,6 +259,125 @@ $("#cancel_pago").click(function(){
     $('#btns_confirm_pago').hide( "fast", function() {
         $("#btns_delete_pago").show( "fast" );
     });
+});
+
+$(".btn_g").click(function(){
+    
+    var value = $(this).val();
+    var route = "/sendPago/"+value;
+    var token = $("#token_correo").val();
+
+    $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'POST',
+        dataType: 'json',
+        success:function(){
+            $("#msj-success").removeClass("hide");
+            $("#msj-success").html("Correo enviado.");
+        },
+        error: function (jqXHR, exception) {
+            $("#msj-fail").removeClass("hide");
+            $("#msj-fail").html("Intentar de nuevo.");
+            hide_btn2();
+        } 
+    });
+
+});
+
+
+var t_adeudos=0,t_recargos=0,t_pendientes=0,t_descuento=0,total=0;
+
+function get_user(id){
+
+    var value = id;
+    var route = "/getUser/"+value;
+    var status='',st='',retardo=0,td_retardo='';
+
+    $.get(route, function(res){
+
+        $('#pagosContent tbody tr').html('');
+
+        retardo = res[0].retardo;
+        n_adeudos = res[1].length;
+        n_pendientes = res[2].length;
+       
+        //status
+        status = res[0][0].status;
+        if (status==0){
+            st = '<span class="label label-danger">Adeudo</span>';
+        }else if(status == 1){
+            st = '<span class="label label-success">Al corriente</span>';
+        }
+        $('#showStatus').html('<p><b>Status:</b></p><p> '+st+'</p>');
+
+        for(i=0;i<n_adeudos;i++){
+            t_adeudos += res[1][i].amount;
+            if (res[1][i].retardo > 0){
+                t_recargos += res[1][i].retardo;
+                td_retardo = '<td><input type="checkbox" name="pretardo" value="'+ res[1][i].id +'" checked> $'+ retardo +'</td>';
+            }else{
+                td_retardo = '<td><input type="checkbox" name="pretardo" value="' + res[1][i].id + '" > $'+ retardo +'</td>';
+            }
+
+            $('#pagosContent tbody').append(
+                '<tr>'+
+                '<td><input type="checkbox" name="padeudo" value="'+ res[1][i].id +'" checked="true"></td>'+
+                '<td>'+ res[1][i].date +'</td>'+
+                '<td><span class="label label-danger">Adeudo</span></td>'+
+                '<td>$ '+ res[1][i].amount +'</td>'+ td_retardo + '</tr>'
+                );
+        }
+
+        for(j=0;j<n_pendientes;j++){
+            t_pendientes += res[1][j].amount;
+
+            $('#pagosContent tbody').append(
+                '<tr>'+
+                '<td><input type="checkbox" name="padeudo" value="'+ res[1][j].id +'" checked></td>'+
+                '<td>'+ res[1][j].date +'</td>'+
+                '<td><span class="label label-pendiente">Pendiente</span></td>'+
+                '<td>$ '+ res[1][j].amount +'</td>'+ '<td></td>' + '</tr>'
+                );
+        }
+
+        total = t_adeudos + t_recargos + t_descuento + t_pendientes;
+
+        $('#calculo .r').html(
+            '<p>$'+t_adeudos+'</p>'+
+            '<p>$'+t_recargos+'</p>'+
+            '<p>$'+t_pendientes+'</p>'+
+            '<p>$'+t_descuento+'</p>'+
+            '<span></span>'+'<p>$'+total+'</p>'
+        );
+         //console.log('adeudo:'+total_adeudo);
+    }); 
+
+}
+
+function calculo(a,r,p,d){
+
+
+    total = t_adeudos + t_recargos + t_descuento + t_pendientes;
+
+    $('#calculo .r').html(
+        '<p>$'+t_adeudos+'</p>'+
+        '<p>$'+t_recargos+'</p>'+
+        '<p>$'+t_pendientes+'</p>'+
+        '<p>$'+t_descuento+'</p>'+
+        '<span></span>'+'<p>$'+total+'</p>'
+    );
+}
+
+$("#getUser").click(function(){
+    
+    var value = $('#search-input').val();
+    var route = "/getUser/"+value;
+
+    $.get(route, function(res){
+        console.log(res);
+    });
+
 });
 
 /* EGRESOS */
@@ -571,7 +697,7 @@ $( "#tipo_select" ).change(function() {
 
     var tipo1 =  '<div><h4>Asunto:</h4><input type="text" id="txt_subj" style="width: 300px;"></div><div><h4>Redactar mensaje:</h4><textarea id="txt_msg" rows="5" cols="50"></textarea></div>';
     var tipo2 =  "<div><h4>Mensaje de Corte</h4></div>";
-    var tipo3 =  "<div><h4>Mensaje de Adeudo</h4></div>";
+    var tipo3 =  "<div><h4>Recordatorio de pago</h4></div>";
 
     if( this.value == 1){
          $("#tipos").html(tipo1);
@@ -759,7 +885,6 @@ function Mostrar_sitio(btn){
         $("#path_sitio").val(res.path);
     });
 }
-
 
 
 /* PAYPAL */

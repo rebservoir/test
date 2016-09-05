@@ -9,7 +9,6 @@
 				<h4 class="modal-title" id="myModalLabel">Modificar Información</h4>
 			</div>
 
-
 			<div class="modal-body">
 				<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token_info">
 				<input type="hidden" id="id">

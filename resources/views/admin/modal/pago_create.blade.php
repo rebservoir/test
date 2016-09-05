@@ -15,18 +15,50 @@
 					{!!Form::label('*Usuario:')!!}
 					{!!Form::text('id_user',null,['id'=>'search-input','class'=>'typeahead form-control','placeholder'=>'Ingresar nombre de usuario y seleccionar.'])!!}
 				</div>
-				<div class="form-group form_date">
-					{!!Form::label('*Fecha con formato: aaaa-mm-dd')!!}
-					{!! Form::text('date', '',['id' => 'datepicker', 'placeholder'=>'aaaa-mm-dd'])!!}
+				
+				<div id="showStatus">
+					<p><b>Status:</b></p>
 				</div>
-				<div class="form-group">
-					{!!Form::label('*Monto:')!!}
-					<input type="text" id="amount" class="form-control" value="Cuota de usuario (automatico)" disabled>
+
+				<div id="pagosContent" class="form-group">
+					<p><b>Tabla de pagos:</b></p>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Sel.</th>
+								<th>Concepto</th>
+								<th>Status</th>
+								<th>Cuota</th>
+								<th>Retardo</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+
 				</div>
-				<div class="form-group">
-					{!!Form::label('*Status:')!!}
-					{!!Form::select('status', ['Adeudo', 'Pagado','Pendiente'],null,['id'=>'status'])!!}
+
+				<div id="calculo" class="form-group">
+					<div class="row">
+						<div class="th l">
+							<p><b>Adeudo:</b></p>
+							<p><b>Recargos:</b></p>
+							<p><b>Pendientes:</b></p>
+							<p><b>Descuento:</b></p>
+							<span></span>
+							<p><b>Total:</b></p>
+						</div>
+						<div class="th r">
+							<p>$0.00</p>
+							<p>$0.00</p>
+							<p>$0.00</p>
+							<p>$0.00</p>
+							<span></span>
+							<p>$0.00</p>
+						</div>
+					</div>
 				</div>
+
 			</div>
 				<div class="modal-footer">
 					<div class="requeridos"><p>*Campos requeridos.</p></div>
@@ -42,6 +74,45 @@
 </div>
 
 
+<style type="text/css">
+.label{
+    font-size: 12px !important;
+}
+#showStatus{
+	width: 100%;
+	display: inline-block;
+	margin-bottom: 20px;
+}
+#showStatus p{
+	display: inline;
+}
+#pagosContent{
+	width: 100%;
+	display: inline-block;
+}
+#calculo{
+	display: inline-block;
+	width: 100%;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+#calculo span{
+	display: inline-block;
+    width: 100%;
+    border-top: 1px solid;
+    padding-bottom: 10px;
+}
+.l{
+	float: left;
+}
+.r{
+	float: right;
+}
+.th{
+	display: inline-block;
+	width: 50%;
+}
 
+</style>
 					
 					

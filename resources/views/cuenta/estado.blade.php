@@ -56,7 +56,7 @@ $status = 1;
 @endif
 
 
-<h3>Factura al Corte</h3>
+<h3>Estado al Corte</h3>
 
 <table class="table table-bordered table-striped table-condensed ">
   <tbody>

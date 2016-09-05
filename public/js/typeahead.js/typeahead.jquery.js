@@ -1265,6 +1265,7 @@
                 var jk = data['obj'].split('/');
                 var id_user = jk[1];
                 get_id_user_pago(id_user);
+                get_user(id_user);
                 data.obj = jk[0];
                 data.val = jk[0];
                 if (data && !this.eventBus.before("select", data.obj)) {

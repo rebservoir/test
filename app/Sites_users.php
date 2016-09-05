@@ -10,6 +10,6 @@ class sites_users extends Model
 
     //public $timestamps = false;
 
-    protected $fillable = ['id_site', 'id_user'];
+    protected $fillable = ['id_site', 'id_user','field1', 'field2','role', 'type','status'];
 
 }

@@ -26,13 +26,13 @@
           		$monto = $cuota;
 			/*--}}
 
-@foreach($ultimo_p as $pa)
-      {{--*/ 
-        $pago_hasta = $pa->date; 
-        $pago_hasta_mes = explode("-", $pago_hasta); 
-        break;
-      /*--}}
-@endforeach
+	@foreach($ultimo_p as $pa)
+	      {{--*/ 
+	        $pago_hasta = $pa->date; 
+	        $pago_hasta_mes = explode("-", $pago_hasta); 
+	        break;
+	      /*--}}
+	@endforeach
 
 <input type="hidden" name="date" value="{{ $pago_hasta }}" id="begin_date">
 <input type="hidden" name="user_name" value="{{ Auth::user()->name }}" id="user_name">
@@ -71,8 +71,6 @@
 									$j=1;
 									$k++;
 								}
-
-
 							}
 
 							/*--}}

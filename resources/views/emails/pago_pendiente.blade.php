@@ -119,22 +119,36 @@
     </tbody>
 </table>
 
+<br>
+
 <table class="table table-condensed" style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;border-collapse: collapse!important;mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-spacing: 0;background-color: transparent;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;width: 100%;max-width: 100%;margin-bottom: 20px;">
-          <thead style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+          <tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;display: table-header-group;">
+            
             <tr style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
-              <th style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 5px;text-align: left;line-height: 1.42857143;vertical-align: bottom;border-top: 1px solid #ddd;border-bottom: 2px solid #ddd;background-color: #fff!important;">Concepto</th>
-              <th style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 5px;text-align: left;line-height: 1.42857143;vertical-align: bottom;border-top: 1px solid #ddd;border-bottom: 2px solid #ddd;background-color: #fff!important;">Precio Unitario</th>
-              <th style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 5px;text-align: left;line-height: 1.42857143;vertical-align: bottom;border-top: 1px solid #ddd;border-bottom: 2px solid #ddd;background-color: #fff!important;">Descuento</th>
-              <th style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;padding: 5px;text-align: left;line-height: 1.42857143;vertical-align: bottom;border-top: 1px solid #ddd;border-bottom: 2px solid #ddd;background-color: #fff!important;">Importe</th>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><strong>Concepto:</strong></td>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$concepto!!}</td>
             </tr>
-          </thead>
-          <tbody style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
-            <tr style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;page-break-inside: avoid;">
-              <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><p style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;margin: 0 0 10px;padding: 0;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;orphans: 3;widows: 3;color: #202020;font-family: Helvetica;font-size: 16px;line-height: 150%;text-align: left;">{!!$concepto!!}</p></td>
-              <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$cuota!!}</td>
-              <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$descuento!!}</td>
-              <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$importe!!}</td>
+
+            <tr>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><b>Cuota:</b></td>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$cuota!!}</td>
+            </tr>  
+
+            <tr>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><b>Retardo:</b></td>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$retardo!!}</td>
             </tr>
+
+            <tr>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><b>Descuento:</b></td>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$descuento!!}</td>
+            </tr>
+            
+            <tr>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;"><b>Total:</b></td>
+                <td style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%;padding: 5px;line-height: 1.42857143;vertical-align: top;border-top: 1px solid #ddd;background-color: #fff!important;">{!!$total!!}</td>
+            </tr>
+            
           </tbody>
         </table>
 

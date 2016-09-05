@@ -6,6 +6,9 @@ function clearModals(){
     $("#cel").val('');
     $("#id").val('');
     $("#type").val(null);
+    $("#field1").val('');
+    $("#field2").val('');
+
     $("#name1").val('');
     $("#email1").val('');
     $("#address1").val('');
@@ -13,6 +16,8 @@ function clearModals(){
     $("#cel1").val('');
     $("#id1").val('');
     $("#type1").val(null);
+    $("#field1_1").val('');
+    $("#field2_2").val('');
     clearAlerts();
 }
 
@@ -61,8 +66,10 @@ function Mostrar(btn){
         $("#phone1").val(res[0].phone);
         $("#cel1").val(res[0].celphone);
         $("#role1").val(res[0].role);
-        $("#id1").val(res[0].id);
+        $("#id1").val(res[0].id_user);
         $("#type1").val(res[0].type);
+        $("#field1_1").val(res[0].field1);
+        $("#field2_1").val(res[0].field2);
 
         if(res[0].role == 1){
             $("#changePass").removeClass("hide");
@@ -73,7 +80,6 @@ function Mostrar(btn){
 }
 
 function loadData(){
-
     var route = "/load";
     $.get(route, function(res){
     });
@@ -220,6 +226,9 @@ $("#react_btn").click(function(){
         $("#phone").val(res.phone);
         $("#cel").val(res.celphone);
         $("#id").val(res.id);
+        $("#type").val(res.type);
+        $("#field1").val(res.field1);
+        $("#field2").val(res.field2);
     });
 
     $(".btn_go").addClass("hide");
@@ -248,6 +257,8 @@ $("#reactivar_2").click(function(){
     var dato5 = $("#cel").val();
     var dato6 = $("#role").val();
     var dato7 = $("#type").val();
+    var dato8 = $("#field1").val();
+    var dato9 = $("#field2").val();
 
     var route = "reactivar/"+ value;
     var token = $("#token").val();
@@ -264,7 +275,9 @@ $("#reactivar_2").click(function(){
             phone:      dato4,
             celphone:   dato5,
             role:       dato6,
-            type:       dato7
+            type:       dato7,
+            field1:     dato8,
+            field2:     dato9 
         },
         success:function(data){
             if(data.res=='ok'){
@@ -310,6 +323,9 @@ $("#asignar_btn").click(function(){
         $("#phone").val(res.phone);
         $("#cel").val(res.celphone);
         $("#id").val(res.id);
+        $("#type").val(res.type);
+        $("#field1").val(res.field1);
+        $("#field2").val(res.field2);
     });
 
     $(".btn_go").addClass("hide");
@@ -339,6 +355,9 @@ $("#asignar_2").click(function(){
         var dato4 = $("#phone").val();
         var dato5 = $("#cel").val();
         var dato6 = $("#role").val();
+        var dato7 = $("#type").val();
+        var dato8 = $("#field1").val();
+        var dato9 = $("#field2").val();
 
         var route = "asignar/"+dato;
         var token = $("#token").val();
@@ -356,7 +375,9 @@ $("#asignar_2").click(function(){
             phone:      dato4,
             celphone:   dato5,
             role:       dato6,
-            type:       dato7
+            type:       dato7,
+            field1:     dato8,
+            field2:     dato9
         },
         success:function(response){
             if(response.res == 'ok'){ //load json data from server and output message 
@@ -411,7 +432,9 @@ $("#registrar").click(function(){
     var dato4 = $("#phone").val();
     var dato5 = $("#cel").val();
     var dato6 = $("#role").val();
-
+    var dato7 = $("#type").val();
+    var dato8 = $("#field1").val();
+    var dato9 = $("#field2").val();
 
     var route = "/usuario";
     var token = $("#token").val();
@@ -428,7 +451,10 @@ $("#registrar").click(function(){
             phone:      dato4,
             celphone:   dato5,
             role:       dato6,
-            type:       dato7
+            type:       dato7,
+            field1:     dato8,
+            field2:     dato9
+
         },
         success:function(data){
             if(data.tipo=='success'){
@@ -481,6 +507,9 @@ $("#actualizar").click(function(){
     var dato4 = $("#phone1").val();
     var dato5 = $("#cel1").val();
     var dato6 = $("#role1").val();
+    var dato7 = $("#type1").val();
+    var dato8 = $("#field1_1").val();
+    var dato9 = $("#field2_1").val();
 
     var route = "/usuario/"+value+"";
     var token = $("#token").val();
@@ -497,7 +526,9 @@ $("#actualizar").click(function(){
             phone:      dato4,
             celphone:   dato5,
             role:       dato6,
-            type:       dato7
+            type:       dato7,
+            field1:     dato8,
+            field2:     dato9
         },
 
         success:function(){
@@ -576,7 +607,7 @@ var index=0;
 var names = [];
 
 $( document ).ready(function() {
- var route = "/usuario/show";
+    var route = "/usuario/show";
     $.get(route, function(res){
         for (index = 0; index < res.length; index++) {
             names[index] = res[index].name + '/' +res[index].id;

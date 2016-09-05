@@ -4,19 +4,19 @@
 		<div><p>Crear Cuotas en <a href="{{ URL::to('/admin/administracion')}}">Administración</a> antes de generar usuarios.</p></div>
 
 	@else
-
-	<div class="form-group">
-			{!!Form::label('*Nombre:')!!}
-			{!!Form::text('name',null,['id'=>'name','class'=>'form-control','placeholder'=>'Ingresar nombre de usuario'])!!}
-		</div>
 		<div class="form-group">
 			{!!Form::label('*Email:')!!}
 			{!!Form::email('email',null,['id'=>'email','class'=>'form-control','placeholder'=>'Ingresar Email'])!!}
 		</div>
-			<div id="email_msg">
-			</div>
+		<div id="email_msg">
+		</div>
 			<button type="button" id="react_btn" class="btn btn-primary hidden" value="" style="margin: -10px 0px 10px 0px;">Proceder a reactivar</button>
 			<button type="button" id="asignar_btn" class="btn btn-primary hidden" value="" style="margin: -10px 0px 10px 0px;">Proceder a asignar</button>
+
+		<div class="form-group">
+			{!!Form::label('*Nombre:')!!}
+			{!!Form::text('name',null,['id'=>'name','class'=>'form-control','placeholder'=>'Ingresar nombre de usuario'])!!}
+		</div>
 		<div class="form-group">
 			{!!Form::label('Dirección:')!!}
 			{!!Form::text('address',null,['id'=>'address','class'=>'form-control','placeholder'=>'Ingresar direccion'])!!}
@@ -28,6 +28,14 @@
 		<div class="form-group">
 			{!!Form::label('Celular:')!!}
 			{!!Form::text('celphone',null,['id'=>'cel','class'=>'form-control','placeholder'=>'Ingresar direccion'])!!}
+		</div>
+		<div class="form-group">
+			{!!Form::label('Campo adicional 1:')!!}
+			{!!Form::text('field1',null,['id'=>'field1','class'=>'form-control','placeholder'=>'Campo adicional 1'])!!}
+		</div>
+		<div class="form-group">
+			{!!Form::label('Campo adicional 2:')!!}
+			{!!Form::text('field2',null,['id'=>'field2','class'=>'form-control','placeholder'=>'Campo adicional 2'])!!}
 		</div>
 			<div class="type_msg"></div>
 		<div class="form-group">

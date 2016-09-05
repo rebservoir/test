@@ -94,7 +94,7 @@
 <br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"><br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;">
 Entra aqui para restaurar tu contraseña:
 <br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"> 
-{{ url('password/reset/'.$token) }}
+<a href="{{ url('password/reset/'.$token) }}">{{ url('password/reset/'.$token) }}</a>
 <br style="-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;"> 
 </span>
 

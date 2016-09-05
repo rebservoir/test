@@ -248,8 +248,8 @@ h1{
     border-top: 2px solid #3A95D4;
     border-bottom: 10px solid #3A95D4;
     border-left: 2px solid #3A95D4;
-    border-right: 10px solid #3A95D4;
-    padding: 15px 0px 10px 0px;
+    border-right: 2px solid #3A95D4;
+    padding: 15px 10px 10px 10px;
     width: 60%;
     margin: 0 auto;
     margin-bottom: 30px;
@@ -358,7 +358,6 @@ div#form_msg p{
     font-size: 30px;
     margin-top: 20px;
     font-family: 'adelle_sanslight', Arial, sans-serif !important;
-    border: 1px solid #fff;
 }
 .btn-mas p{
     display: inline;
@@ -369,7 +368,7 @@ div#form_msg p{
 }
 .btn-mas:hover{
     color: #fff;
-    background-color: rgba(58, 149, 212, 0.5);
+    background-color: #31709c;
 }
 .btn-green:hover{
     background-color: #5EB960;

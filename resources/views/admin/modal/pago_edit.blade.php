@@ -27,7 +27,9 @@
 				</div>
 				<div class="form-group">
 					{!!Form::label('*Status:')!!}
-					{!!Form::select('status', ['Adeudo', 'Pagado','Pendiente'],null,['id'=>'status_pago'])!!}
+					{!!Form::select('status', ['2'=>'Pendiente','1'=>'Pagado','0'=>'Adeudo'],null,['id'=>'status_pago'])!!}
+
+
 				</div>
 			</div>
 				<div class="modal-footer">

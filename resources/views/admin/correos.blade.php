@@ -13,7 +13,7 @@
 				<select id='tipo_select' name='tipo_select' class='select_correo'>
 					<option value='1' selected='selected'>Mensaje</option>
 					<option value='2'>Corte</option>
-					<option value='3'>Adeudo</option>
+					<option value='3'>Recordatorio</option>
 				</select>
 	  	</div>
 	  	<div class="col-xs-6">
@@ -88,13 +88,6 @@ tbody{
     border: 1px solid #e2e2e2;
     border-top: none;
 }
-thead th:last-child {
-    text-align: center;
-}
-tbody td:last-child {
-    text-align: center;
-}
-
 #user_table thead th:first-child{
     width: 80px;
 	text-align: center;
@@ -103,6 +96,16 @@ tbody td:last-child {
     width: 80px;
 	text-align: center;
 }
+.btn_g{
+	background-color: #4CAF50;
+    border-color: #459C48;
+    color: #fff;
+}
+.btn_g:hover{
+	color: #fff;
+    background-color: #459C48;
+}
+
 
 </style>
 

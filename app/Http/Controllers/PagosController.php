@@ -51,14 +51,16 @@ class PagosController extends Controller
         //
     }
 
+
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PagoUpdateRequest $request)
-    {
+    public function store(PagoUpdateRequest $request){
+
         if($request->ajax()){
 
             $id_site = \Session::get('id_site');
@@ -112,24 +114,9 @@ class PagosController extends Controller
                                 'id_site' => $id_site
                             ]);
 
-                            
-
-                            $importe = '$'.number_format($cuota->amount, 2, '.', '');
-
-                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail'=> $user->email,
-                            'usuario'=> $user->name,'site' => $site,'status' => $status,'fecha' => $request->date,
-                            'name'=> $user->name,'address'=> $user->address,
-                            'concepto'=> $concepto,'cuota' => $importe,'descuento' =>'0', 'importe' => $importe
-                             ];
-
-                            Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
-                                $msj->subject($data['subj']);
-                                $msj->to($data['user_mail']);
-                            });
-
-                            return response()->json([
-                                "tipo" => 'success'
-                            ]);
+                return response()->json([
+                  "tipo" => 'success'
+                ]);
 
             }else{
 
@@ -164,7 +151,6 @@ class PagosController extends Controller
                              $status = 'Pendiente';
                             }
 
-
                             DB::table('pagos')->insert(
                             [   'id_user' => $id_user,
                                 'date' => $request->date,
@@ -174,21 +160,6 @@ class PagosController extends Controller
                                 'user_name' => $user->name,
                                 'id_site' => $id_site
                             ]);
-
-                           
-
-                            $importe = '$'.number_format($cuota->amount, 2, '.', '');
-
-                            $data = [ 'msg'=> 'pago generado', 'subj'=> 'Pago generado', 'user_mail'=> $user->email,
-                            'usuario'=> $user->name,'site' => $site,'status' => $status,'fecha' => $request->date,
-                            'name'=> $user->name,'address'=> $user->address,
-                            'concepto'=> $concepto,'cuota' => $importe,'descuento' =>'0', 'importe' => $importe
-                             ];
-
-                            Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
-                                $msj->subject($data['subj']);
-                                $msj->to($data['user_mail']);
-                            });
 
                             return response()->json([
                                 "tipo" => 'success'
@@ -206,6 +177,52 @@ class PagosController extends Controller
           }
         } // end request ajax
     } //end function
+
+    public function sendPago($id_pago){
+
+      $id_site = \Session::get('id_site');
+      $site = DB::table('sites')->where('id', $id_site)->value('name');
+      $sts = DB::table('sites_users')->where('id_user', $id_pago)->value('status');
+      $pago = Pagos::find($id_pago);
+      $user = User::find($pago->id_user);
+      $meses = array("x","Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+      $newDate = explode("-", $pago->date);
+      $y = $newDate[0];
+      $m = intval($newDate[1]);
+      $d = $newDate[2];
+      $concepto = $meses[$m].' '.$y;
+      $descuento = 0;
+
+      if($sts == 0){
+        $status = 'Adeudo';
+      }elseif($sts == 1){
+        $status = 'Pagado';
+      }else{
+        $status = 'Pendiente';
+      }
+
+      $importe = '$'.number_format($pago->amount, 2, '.', '');
+      $retardo = '$'.number_format($pago->retardo, 2, '.', '');
+      $total =  '$'.number_format($pago->amount + $pago->retardo + $descuento, 2, '.', ''); 
+      $descuento = '$'.number_format($descuento, 2, '.', '');
+
+        $data = [ 'msg'=> 'Pago generado', 'subj'=> 'Pago generado', 'user_mail'=> $user->email,
+                  'usuario'=> $user->name,'site' => $site,'status' => $status,'fecha' => $pago->date,
+                  'name'=> $user->name,'address'=> $user->address, 'concepto'=> $concepto,
+                  'cuota' => $importe,'retardo' => $retardo, 'descuento' =>$descuento, 'importe' => $importe, 'total'=>$total
+                ];
+
+        Mail::send('emails.pago_pendiente',$data, function ($msj) use ($data) {
+                                $msj->subject($data['subj']);
+                                $msj->to($data['user_mail']);
+        });
+
+        return response()->json([
+            "tipo" => 'success'
+        ]);
+
+    } /*end sendPago*/
+
 
     /**
      * Display the specified resource.
@@ -272,13 +289,8 @@ class PagosController extends Controller
           $id_user = $request->id_user;
           $type = DB::table('sites_users')->where('id_site', $id_site)->where('id_user', $id_user)->value('type');
           $cuota = Cuotas::find($type);
-          $retardo = $cuota->retardo;
           $monto = $request->amount;
-          $nuevo_monto = $monto + $retardo;
-
-          if($monto == $cuota->amount) {
-            $monto = $nuevo_monto;
-          }
+          $retardo = $cuota->retardo;
 
           DB::table('pagos')
             ->where('id', $id)
@@ -286,6 +298,7 @@ class PagosController extends Controller
                        'date' => $request->date,
                        'status' => $status,
                        'amount' => $monto,
+                       'retardo' => $retardo,
                        'user_name' => $request->user_name
               ]);
 
@@ -303,11 +316,7 @@ class PagosController extends Controller
           $pago->save();
         }
 
-
-        
-        
-
-        \Session::flash('update', 'Pago actualizado exitosamente.');
+        //\Session::flash('update', 'Pago actualizado exitosamente.');
 
         return response()->json([
             "mensaje"=>'listo'
@@ -323,11 +332,27 @@ class PagosController extends Controller
     public function destroy($id)
     {
         $pago = Pagos::find($id);
-        $pago->delete();
 
-        return response()->json([
-            "mensaje"=>'eliminado'
-            ]);
+        //solo se pueden eliminar los pagos del mes en curso
+        $year = date('Y');
+        $month = date('m');
+        $newDate = explode("-", $pago->date);
+
+        $y = $newDate[0];
+        $m = intval($newDate[1]);
+
+        if(($y>=$year) && ($m>=$month)) {
+          $pago->delete();
+
+          return response()->json([
+            "mensaje"=>'success'
+          ]);
+        }else{
+          return response()->json([
+            "mensaje"=>'fail'
+          ]);
+        }
+        
     }
 
 
@@ -361,7 +386,11 @@ class PagosController extends Controller
         $id_site = $sitio->id;
 
         //para cada sitio obtener usuarios y pagos (solo users, no admins)
-        $users = DB::select('select users.*, sites_users.status, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_site = :id AND sites_users.role = 0', ['id' => $id_site]);
+        $users = DB::select('select users.*, sites_users.status, sites_users.type 
+                              FROM users JOIN sites_users ON sites_users.id_user = users.id 
+                              AND sites_users.id_site = :id 
+                              AND sites_users.role = 0', 
+                              ['id' => $id_site]);
 
         foreach ($users as $user){
 

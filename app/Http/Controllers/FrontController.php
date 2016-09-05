@@ -252,7 +252,7 @@ class FrontController extends Controller
             $sitio_plan = DB::table('sites')->where('id', $id_site )->value('plan');
             $plan = Plans::where('id', $sitio_plan )->get();
             $user_count = DB::table('sites_users')->where('id_site', $id_site)->count();
-            $pagos = Pagos::where('id_site', $id_site )->get();
+            $pagos = Pagos::where('id_site', $id_site )->orderBy('created_at', 'DESC')->get();
             $egresos = Egresos::where('id_site', $id_site )->get();
             $cuotas = Cuotas::where('id_site', $id_site )->orderBy('concepto', 'ASC')->get();
 

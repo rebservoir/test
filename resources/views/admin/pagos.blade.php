@@ -64,13 +64,17 @@ $day = date('j');
 
     <br><br>
 
+<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token_correo">
+
 <div id="tablaPagos">
 	<table class="table table-striped">
 		<thead>
 			<th>Usuario</th>
 			<th>Monto</th>
+      <th>Retardo</th>
 			<th>Fecha</th>
 			<th>Editar</th>
+      <th>Enviar</th>
 		</thead>
 		<tbody id="datos">
 			@foreach($pagos as $pago)
@@ -79,10 +83,13 @@ $day = date('j');
 					<tr>
 						<td><p>{{$pago->user_name}}</p></td>
 						{{--*/ $money = number_format($pago->amount, 2, '.', '') /*--}}
+            {{--*/ $retardo = number_format($pago->retardo, 2, '.', '') /*--}}
 						<td><p>{{'$ '.$money}}</p></td>
+            <td><p>{{'$ '.$retardo}}</p></td>
 						<td><p>{{$pago->date}}</p></td>
 						<td><button value='{{$pago->id}}' OnClick='Mostrar_pago(this)' class='btn btn-primary' data-toggle="modal" data-target="#pago_edit">Editar</button></td>
-					</tr>
+					  <td><button value='{{$pago->id}}' class='btn btn_g'>Enviar</button></td>
+          </tr>
 			    @endif
 			@endforeach 
 		</tbody>

@@ -106,6 +106,7 @@
 					@include('admin/paypal')
 				</div>
 			</div>
+			
 		</div> <!-- END cont_right -->
 	</div> <!-- END main_cont -->
 @stop

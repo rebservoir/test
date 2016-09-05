@@ -96,6 +96,8 @@ class UsuarioController extends Controller
                  'id_site' => $id_site,
                  'type' => $request->type,
                  'role' => $request->role,
+                 'field1' => $request->field1,
+                 'field2' => $request->field2,
                  'status' => 1
                  ]);
 
@@ -184,13 +186,13 @@ class UsuarioController extends Controller
         $admin_email = $this->auth->user()->email;
         $sitio = Sites::where('id', $id_site)->get();
         $sitio_plan = DB::table('sites')->where('id', $id_site )->value('plan');
-        $user_limit = DB::table('plans')->where('id', $id_site )->value('user_limit');
+        $user_limit = DB::table('plans')->where('id', $sitio_plan )->value('user_limit');
         $user_count = DB::table('sites_users')->where('id_site', $id_site)->count();
         $sitio_this = Sites::findOrFail($id_site);
         $user = User::findOrFail($id);
 
-        if( $user_count<$user_limit){
-            
+        if($user_count<$user_limit){
+
             //check status
             $adeudos = DB::table('pagos')->where('id_user', $id)->where('id_site', $id_site)->where('status', 0 )->count();
 
@@ -205,7 +207,9 @@ class UsuarioController extends Controller
                       'id_site' => $id_site,
                       'type' => $request->type,
                       'role' => $request->role,
-                      'status' => $status  
+                      'field1' => $request->field1,
+                      'field2' => $request->field2,
+                      'status' => $status
                      ]);
 
             //email invitacion
@@ -238,13 +242,13 @@ class UsuarioController extends Controller
         $id_site = \Session::get('id_site');
         $admin_email = $this->auth->user()->email;
         $sitio = Sites::where('id', $id_site)->get();
-        $sitio_plan = DB::table('sites')->where('id', $id_site )->value('plan');
-        $user_limit = DB::table('plans')->where('id', $id_site )->value('user_limit');
+        $sitio_plan = DB::table('sites')->where('id', $id_site)->value('plan');
+        $user_limit = DB::table('plans')->where('id', $sitio_plan)->value('user_limit');
         $user_count = DB::table('sites_users')->where('id_site', $id_site)->count();
         $password = substr( md5(microtime()), 1, 6);
         $sitio_this = Sites::findOrFail($id_site);
 
-        if( $user_count<$user_limit){
+        if($user_count<$user_limit){
 
             $site_user_del = DB::table('sites_users_deleted')->where('id_user',$id)->where('id_site',$id_site);
             $site_user_del->delete();
@@ -311,7 +315,26 @@ class UsuarioController extends Controller
         $id_site = \Session::get('id_site');
         $user = DB::select('select users.* FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_site = :id', ['id' => $id_site]);
         return response()->json($user);
-    }
+    }/*show*/
+
+    public function getUser($id){
+
+        $id_site = \Session::get('id_site');
+        $id_user = $id;
+        $user = DB::select('select sites_users.* FROM sites_users JOIN users ON sites_users.id_user = users.id AND sites_users.id_user = :id_user AND sites_users.id_site = :id', ['id_user'=>$id_user,'id' => $id_site]);
+        //$user = DB::select('SELECT * FROM sites_users WHERE sites_users.id_user = ? AND sites_users.id_site = ?', [$id_user, $id_site]);
+        $id_cuota = DB::table('sites_users')->where('id_user', $id_user)->where('id_site', $id_site)->value('type');
+        $monto = DB::table('cuotas')->where('id', $id_cuota)->value('amount');
+        $retardo = DB::table('cuotas')->where('id', $id_cuota)->value('retardo');
+
+        $user = array_add($user, 'cuota', $monto );
+        $user = array_add($user, 'retardo', $retardo );
+        $adeudos = DB::table('pagos')->where('id_site',$id_site)->where('id_user',$id_user)->where('status',0)->get();
+        $pendientes = DB::table('pagos')->where('id_site',$id_site)->where('id_user',$id_user)->where('status',2)->get();
+
+        return response()->json([ $user,$adeudos,$pendientes ]);
+
+    }/*get user*/
 
     public function search($id)
     {
@@ -397,7 +420,7 @@ class UsuarioController extends Controller
     public function edit($id)
     {
         $id_site = \Session::get('id_site');
-        $user = DB::select('select users.*, sites_users.status, sites_users.role, sites_users.type FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_user = :id_user AND sites_users.id_site = :id_site', ['id_user' => $id, 'id_site' => $id_site]);
+        $user = DB::select('select users.*, sites_users.* FROM users JOIN sites_users ON sites_users.id_user = users.id AND sites_users.id_user = :id_user AND sites_users.id_site = :id_site', ['id_user' => $id, 'id_site' => $id_site]);
         $user = collect($user);
         return response()->json(
             $user->toArray()
@@ -423,20 +446,20 @@ class UsuarioController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
 
-            $user = User::find(6);
+            $user = User::find($id);
             $id_site = \Session::get('id_site');
-            $user->fill($request->all());
-            $user->save();
-            /*
+            //$user->fill($request->all());
+            //$user->save();
+            
             $user->name = $request->name;
             $user->email = $request->email;
             $user->address = $request->address;
             $user->phone = $request->phone;
             $user->celphone = $request->celphone;
             $user->save();
-            */
-            DB::table('sites_users')->where('id_user', 6)->where('id_site', $id_site)
-                ->update(['role' => $request->role, 'type' => $request->type]);
+            
+            DB::table('sites_users')->where("id_user", $id)->where("id_site", $id_site)
+                ->update(["role" => $request->role, "type" => $request->type, "field1" => $request->field1, "field2" => $request->field2]);
 
             return response()->json([
                 "message"=>'listo'
